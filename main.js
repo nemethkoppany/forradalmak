@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {string} className 
+ * @returns {HTMLDivElement}
+ */
 const makeDiv = (className) => {//Arrow function egy classname bemeneti paraméterrel
     const div = document.createElement("div");//div element létrehozása
     div.className = className;//Ennek a div elementnek adunk egy className-et (Ezt a classname-et majd mi adjuk meg)
