@@ -87,9 +87,10 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
             label.innerHTML = fieldElement.fieldLabel;//Ugyan így a textContent
             field.appendChild(label);//És ezt hozzárakjuk a fieldhez
         
+
         
             if(fieldElement.fieldid === "success"){//Hogyha a fejlécnél elértünk a "sikeres" mezőhöz
-                input = document.createElement("select");//Hozzunk létre egy legördülő menüt
+                const input = document.createElement("select");//Hozzunk létre egy legördülő menüt
                 input.id = fieldElement.fieldid;//Adjuk meg a select id-jét
         
                 const option1 = document.createElement("option");//Első opció
@@ -104,13 +105,15 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
                 input.appendChild(option2);//Hozzárakjuk az opciót az inputhoz
         
                 field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
+                field.appendChild(input);//Ezt az egészet belerakjuk a field-be
             }
             else{//Ha még nem vagyunk a selectnél
-                input = document.createElement("input");//Csak input fieldet hozzunk létre
+                const input = document.createElement("input");//Csak input fieldet hozzunk létre
                 input.id = fieldElement.fieldid;//Aminek ugyan az az id-je mint ami az objektumok tuéajdonságainak
                 field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és legördülő menü
+                field.appendChild(input);//Ezt az egészet belerakjuk a field-be
             }
-            field.appendChild(input);//Ezt az egészet belerakjuk a field-be
+            
         }
         const button = document.createElement("button");//Készítünk egy gombot
         button.textContent = "Hozzáadás";//Amibe ez lesz írva
