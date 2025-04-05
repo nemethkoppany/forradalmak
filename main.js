@@ -70,8 +70,8 @@ for(const fieldElement of fieldElements){//Végigmegyünk a tömbön
         option2.value = "no";//Az értéke no
         option2.innerHTML = "nem";//Anmit kiír: nem
 
-        input.appendChild(option1);//Hozzárakjuk az opciót a fieldhez
-        input.appendChild(option2);//Hozzárakjuk az opciót a fieldhez
+        input.appendChild(option1);//Hozzárakjuk az opciót az inputhoz
+        input.appendChild(option2);//Hozzárakjuk az opciót az inputhoz
 
         field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
     }
