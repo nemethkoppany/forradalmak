@@ -14,15 +14,24 @@ class Area{//Készítünk egy Area osztályt
      * @param {string} NameOfTheClass megadjuk a változó típusát
      */
     constructor(NameOfTheClass){//constructor létrehozása aminek van egy NameOfTheClass bemeneti paramétere
-        let container = document.querySelector(".containeroop");//Eltároljuk egy változóban az első olyan elemet aminek van egy containeroop nevű class-a 
+        const container = this.#getContainer();//Egy változóba eltároljuk a #getContainer() metódus visszatérési értékét 
+        this.#div = document.createElement("div");//Készítünk egy divet
+        this.#div.className = NameOfTheClass;//Megadjuk a class nevét
+        container.appendChild(this.#div);//Hozzáadjuk a containerhez
         if(!container){//Ha nincs ilyen elem
             container = document.createElement("div");//Készítünk egy div-et
             container.className = "containeroop";//És megadjuk neki ezt a class-t
             document.body.appendChild(container);//És hozzáappendeljük a body-hoz
         }
-        this.#div = document.createElement("div");//Az új privát változóban eltároljuk a kreált div elemet
-        this.#div.className = NameOfTheClass;//Ennek adunk majd egy class nevet
-        container.appendChild(this.#div);//Hozzáadjuk a containerhez
+    }
+    #getContainer(){
+        let containerDiv = document.querySelector(".containeroop");//Eltároljuk egy változóban az első olyan elemet aminek van egy containeroop nevű class-a
+        if(!containerDiv){//Ha nincs ilyen elem
+            containerDiv = document.createElement("div");//Készítünk egy div-et
+            containerDiv.className = "containeroop";//És megadjuk neki ezt a class-t
+            document.body.appendChild(containerDiv);//És hozzáappendeljük a body-hoz
+        }
+        return containerDiv;//Visszatérünk a containerDiv-el
     }
 }
 class Table extends Area{//Az Area osztály leszármazottja a Table osztály
@@ -32,6 +41,10 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
      */
     constructor(NameOfTheCssClass){//Konstruktor egy bemeneti paraméterrel
         super(NameOfTheCssClass);//Ezzel a bemeneti paraméterrel meghívjuk az Area osztály kontruktorát
+        const tbody = this.#createTable();//Egy változóba eltároljuk a createTable() metódus visszatérési értékét
+       
+    }
+    #createTable(){//Ez a metódus létrehozza a táblázatot
         const table = document.createElement("table");//Készítünk egy HTML elemet
         this.div.appendChild(table);//Azt hosszárakjuk az Area által kreált div-hez 
 
@@ -50,6 +63,7 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         }
         const tbody = document.createElement("body");//Készítünk egy HTML elemet
         table.appendChild(tbody);//Hozzáadjuk azt a table-höz
+        return tbody;//Visszatérünk a tbody-val
     }
 }
 
@@ -59,24 +73,12 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
      * @param {string} NameOfTheClass 
      */
     constructor(NameOfTheClass){//Konstruktor egy bemeneti paraméterrel
-        super(NameOfTheClass)//Ezzel a bemeneti paraméterrel meghívjuk az Area osztály kontruktorát
+        super(NameOfTheClass, formFields)//Ezzel a bemeneti paraméterrel meghívjuk az Area osztály kontruktorát
 
 
         const formOOP = document.createElement("form");//Készítünk egy formot
         this.div.appendChild(formOOP);//Ezt hozzérakjuk a az Area-ban létrehozott div-hez
-        const formFields = [{//Egx tümb deklarálása, amiben 3 objektum lesz
-            fieldid: "revolution",//Az első input id-ja
-            fieldLabel: "forrdalom"//Az első input fölé ez lesz írva
-        },
-        {
-            fieldid: "year",//A második input id-ja
-            fieldLabel: "évszám"//Az második  input fölé ez lesz írva
-        },
-        {
-            fieldid: "success",//A legördülő menü id-je
-            fieldLabel: "sikeres"//A legördülő menü fölé ez lesz írva
-        }
-        ];
+ 
         
         for(const fieldElement of formFields){//Végigmegyünk a tömbön
             const field = divMaker("field");//készítünk egy divet field class névvel
