@@ -64,7 +64,7 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 
         const formOOP = document.createElement("form");//Készítünk egy formot
         this.div.appendChild(formOOP);//Ezt hozzérakjuk a az Area-ban létrehozott div-hez
-        const fieldElements = [{//Egx tümb deklarálása, amiben 3 objektum lesz
+        const formFields = [{//Egx tümb deklarálása, amiben 3 objektum lesz
             fieldid: "revolution",//Az első input id-ja
             fieldLabel: "forrdalom"//Az első input fölé ez lesz írva
         },
@@ -78,7 +78,7 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
         }
         ];
         
-        for(const fieldElement of fieldElements){//Végigmegyünk a tömbön
+        for(const fieldElement of formFields){//Végigmegyünk a tömbön
             const field = divMaker("field");//készítünk egy divet field class névvel
             formOOP.appendChild(field);//Hozzárakjuk a form-hoz a field-et
         
@@ -90,22 +90,22 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 
         
             if(fieldElement.fieldid === "success"){//Hogyha a fejlécnél elértünk a "sikeres" mezőhöz
-                const input = document.createElement("select");//Hozzunk létre egy legördülő menüt
-                input.id = fieldElement.fieldid;//Adjuk meg a select id-jét
+                const select = document.createElement("select");//Hozzunk létre egy legördülő menüt
+                select.id = fieldElement.fieldid;//Adjuk meg a select id-jét
         
-                const option1 = document.createElement("option");//Első opció
-                option1.value = "yes";//Az értéke yes
-                option1.innerHTML = "igen";//Anmit kiír: igen
+                const yesOption = document.createElement("option");//Első opció
+                yesOption.value = "igen";//Az értéke yes
+                yesOption.innerHTML = "igen";//Anmit kiír: igen
         
-                const option2 = document.createElement("option");//Első opció
-                option2.value = "no";//Az értéke no
-                option2.innerHTML = "nem";//Anmit kiír: nem
+                const noOption = document.createElement("option");//Első opció
+                noOption.value = "nem";//Az értéke no
+                noOption.innerHTML = "nem";//Anmit kiír: nem
         
-                input.appendChild(option1);//Hozzárakjuk az opciót az inputhoz
-                input.appendChild(option2);//Hozzárakjuk az opciót az inputhoz
+                select.appendChild(yesOption);//Hozzárakjuk az opciót az inputhoz
+                select.appendChild(noOption);//Hozzárakjuk az opciót az inputhoz
         
                 field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
-                field.appendChild(input);//Ezt az egészet belerakjuk a field-be
+                field.appendChild(select);//Ezt az egészet belerakjuk a field-be
             }
             else{//Ha még nem vagyunk a selectnél
                 const input = document.createElement("input");//Csak input fieldet hozzunk létre

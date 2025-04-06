@@ -38,7 +38,7 @@ const Simaform = document.createElement("form");//Készytünk egy formot
 formDiv.appendChild(Simaform);//Ezt hozzérakjuk a formDiv-hez
 
 const tbody = document.createElement("tbody");//Készítünk egy HTMLelemet és azt eltároljuk egy változóban
-Simaform.appendChild(tbody);//Hozzáadjuk a form-hoz
+tableElement.appendChild(tbody);//Hozzáadjuk a form-hoz
 
 const fieldElements = [{//Egy tömb deklarálása, amiben 3 objektum lesz
     fieldid: "revolution",//Az első input id-ja
@@ -94,34 +94,33 @@ const button = document.createElement("button");//Készítünk egy gombot
 button.textContent = "Hozzáadás";//Amibe ez lesz írva
 Simaform.appendChild(button);//És azt hozzárakjuk a fprm-hoz
 
-Simaform.addEventListener("submit", (e) => {
-    e.preventDefault();
+Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a form submit eseményére
+    e.preventDefault();//Megakadályozzuk az alapétertelmezett lefutást
 
-    const objectifyingUserResponse = {};
-    const fieldsOfInput = document.querySelectorAll("input");//Kiválasztjuk az összes inputot és selectet a formon belül
-    for (const inputField of fieldsOfInput) {
-        objectifyingUserResponse[inputField.id] = inputField.value; 
+    const objectifyingUserResponse = {};//Készítünk egy üres objektumot, amibe belekerülnek a felhasználó által megadott értékek
+    const fieldsOfInput = e.target.querySelectorAll("input, select");//Kiválasztjuk az összes inputot és selectet a formon belül
+    for (const inputField of fieldsOfInput) {//Végigmegyünk a fieldsOfInput minden elemén
+        objectifyingUserResponse[inputField.id] = inputField.value; //Az objektumunkba belekerülnek a felhasználó által megadott értékek, az id-jük alapján
     }
 
-    tomb.push(objectifyingUserResponse); 
+    tomb.push(objectifyingUserResponse); //Hozzáadjuk a tomb-hoz az objektumot
+
 
     
-    const tr = document.createElement("tr");
+    const tr = document.createElement("tr");//Készítünk egy tr-t
     tbody.appendChild(tr);//Hozzáadjuk a tbody-hoz a tr-t
 
-    const forradalomCell = document.createElement("td");
-    forradalomCell.textContent = objectifyingUserResponse.revolution; 
-    tr.appendChild(forradalomCell);
+    const forradalomCell = document.createElement("td");//Készítünk egy td-t
+    forradalomCell.textContent = objectifyingUserResponse.revolution; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
+    tr.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
 
-    const evszamCell = document.createElement("td");
-    evszamCell.textContent = objectifyingUserResponse.year; 
-    tr.appendChild(evszamCell);
+    const evszamCell = document.createElement("td");//Készítünk egy td-t
+    evszamCell.textContent = objectifyingUserResponse.year; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
+    tr.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
 
-    const sikerCell = document.createElement("td");
-    sikerCell.textContent = objectifyingUserResponse.success; 
-    tr.appendChild(sikerCell);
-
-    tbody.appendChild(tr); 
+    const sikerCell = document.createElement("td");//Készítünk egy td-t
+    sikerCell.textContent = objectifyingUserResponse.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
+    tr.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
 });
 
 containerDiv.appendChild(tableDiv);//Hozzárakjuk a containerdiv-hez a tableDiv-et
