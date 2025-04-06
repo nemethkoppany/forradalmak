@@ -41,6 +41,10 @@ class Area{//Készítünk egy Area osztályt
             document.body.appendChild(container);//És hozzáappendeljük a body-hoz
         }
     }
+    /**
+     * 
+     * @returns {HTMLDivElement}
+     */
     #getContainer(){
         let containerDiv = document.querySelector(".containeroop");//Eltároljuk egy változóban az első olyan elemet aminek van egy containeroop nevű class-a
         if(!containerDiv){//Ha nincs ilyen elem
@@ -79,6 +83,10 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         });
        
     }
+    /**
+     * 
+     * @returns {HTMLTableSectionElement}
+     */
     #createTable(){//Ez a metódus létrehozza a táblázatot
         const table = document.createElement("table");//Készítünk egy HTML elemet
         this.div.appendChild(table);//Azt hosszárakjuk az Area által kreált div-hez 
@@ -106,6 +114,8 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
     /**
      * 
      * @param {string} NameOfTheClass 
+     * @param {Array} formFields
+     * @param {Manager} manager
      */
     constructor(NameOfTheClass,formFields, manager){//Konstruktor hátom bemeneti paraméterrel
         super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát

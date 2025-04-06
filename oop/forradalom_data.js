@@ -15,6 +15,12 @@ class ForradalomData{
         return this.#sikeres;//Visszatér a sikeres értékével
     }
 
+    /**
+     * 
+     * @param {string} forradalom 
+     * @param {string} evszam 
+     * @param {string} sikeres
+     */
     constructor(forradalom, evszam, sikeres){//Ez a konstruktor létrehozza az objektumot
         this.#forradalom = forradalom;//A forradalom értéke a bemeneti paraméter
         this.#evszam = evszam;//Az évszám értéke a bemeneti paraméter
