@@ -1,6 +1,15 @@
 class Area{//Készítünk egy Area osztályt
 
+    /**
+     * 
+     * @type {HTMLDivElement}
+     */
     #div;//Létrehozunk egy új privát változót
+
+    /**
+     * @type {Manager}
+     */
+    #manager;//Létrehozunk egy új privát változót
 
     /**
      * @returns {HTMLDivElement}
@@ -10,10 +19,18 @@ class Area{//Készítünk egy Area osztályt
     }
 
     /**
+     * @returns {Manager}
+     */
+    get manager(){//Csinálunk neki egy gettert, hogy el tudjuk érni a változó
+        return this.#manager;//Visszatér a #manager értékével
+    }
+    /**
      * 
      * @param {string} NameOfTheClass megadjuk a változó típusát
+     * @param {Manager} manager megadjuk a manager típusát
      */
-    constructor(NameOfTheClass){//constructor létrehozása aminek van egy NameOfTheClass bemeneti paramétere
+    constructor(NameOfTheClass,manager){//constructor létrehozása aminek van egy NameOfTheClass bemeneti paramétere
+        this.#manager = manager;//A manager értéke a bemeneti paraméter lesz
         const container = this.#getContainer();//Egy változóba eltároljuk a #getContainer() metódus visszatérési értékét 
         this.#div = document.createElement("div");//Készítünk egy divet
         this.#div.className = NameOfTheClass;//Megadjuk a class nevét
@@ -38,10 +55,28 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
     /**
      * 
      * @param {string} NameOfTheCssClass 
+     * @param {Manager} manager
      */
-    constructor(NameOfTheCssClass){//Konstruktor egy bemeneti paraméterrel
-        super(NameOfTheCssClass);//Ezzel a bemeneti paraméterrel meghívjuk az Area osztály kontruktorát
+    constructor(NameOfTheCssClass,manager){//Konstruktor két bemeneti paraméterrel
+        super(NameOfTheCssClass, manager);//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
         const tbody = this.#createTable();//Egy változóba eltároljuk a createTable() metódus visszatérési értékét
+
+        this.manager.setaddForradalom_dataCallback((data) => {//A manager osztályban beállítjuk a forradalom_dataCallback metódust
+            const row = document.createElement("tr");//Készítünk egy tr-t
+            tbody.appendChild(row);//Hozzáadjuk a tbody-hoz
+
+            const forradalomCell = document.createElement("td");//Készítünk egy td-t
+            forradalomCell.innerText = data.forradalom;//Az aktuális elem belekerül a cellába
+            row.appendChild(forradalomCell);//Hozzáadjuk a row-hoz
+
+            const evszamCell = document.createElement("td");//Készítünk egy td-t
+            evszamCell.innerText = data.evszam;//Az aktuális elem belekerül a cellába
+            row.appendChild(evszamCell);//Hozzáadjuk a row-hoz
+
+            const sikeresCell = document.createElement("td");//Készítünk egy td-t
+            sikeresCell.innerText = data.sikeres;//Az aktuális elem belekerül a cellába
+            row.appendChild(sikeresCell);//Hozzáadjuk a row-hoz
+        });
        
     }
     #createTable(){//Ez a metódus létrehozza a táblázatot
@@ -61,7 +96,7 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
             headerCell.innerText = headerCellText;//Az aktuális elem belekerül a cellába
             headerRow.appendChild(headerCell);//Hozzáadjuk a headerRow-hoz
         }
-        const tbody = document.createElement("body");//Készítünk egy HTML elemet
+        const tbody = document.createElement("tbody");//Készítünk egy tbody-t
         table.appendChild(tbody);//Hozzáadjuk azt a table-höz
         return tbody;//Visszatérünk a tbody-val
     }
@@ -72,8 +107,8 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
      * 
      * @param {string} NameOfTheClass 
      */
-    constructor(NameOfTheClass){//Konstruktor egy bemeneti paraméterrel
-        super(NameOfTheClass, formFields)//Ezzel a bemeneti paraméterrel meghívjuk az Area osztály kontruktorát
+    constructor(NameOfTheClass,formFields, manager){//Konstruktor hátom bemeneti paraméterrel
+        super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
 
 
         const formOOP = document.createElement("form");//Készítünk egy formot
@@ -120,6 +155,19 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
         const button = document.createElement("button");//Készítünk egy gombot
         button.textContent = "Hozzáadás";//Amibe ez lesz írva
         formOOP.appendChild(button);//És azt hozzárakjuk a fprm-hoz
+
+        formOOP.addEventListener("submit", (e) => {//Hozzáadunk egy eseményfigyelőt a formhoz
+            e.preventDefault();
+            const objectifyingUserResponse = {};//Készítünk egy üres objektumot, amibe belekerülnek a felhasználó által megadott értékek
+
+            const fieldsOfInput = e.target.querySelectorAll("input, select");//Kiválasztjuk az összes inputot és selectet a formon belül
+            for(const fieldOfInput of fieldsOfInput){//Végigmegyünk a fieldsOfInput minden elemén
+                objectifyingUserResponse[fieldOfInput.id] = fieldOfInput.value;//Az objektumunkba belekerülnek a felhasználó által megadott értékek, az id-jük alapján
+            }
+
+            const data = new ForradalomData(objectifyingUserResponse.revolution, objectifyingUserResponse.year, objectifyingUserResponse.success);//Készítünk egy új ForradalomData objektumot a felhasználó által megadott értékekkel
+            this.manager.addData(data);//Hozzáadjuk a managerhez az új ForradalomData objektumot
+        });
     }
 
 }

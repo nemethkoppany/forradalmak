@@ -1,0 +1,23 @@
+class ForradalomData{
+    #forradalom; //Ez egy privát változó
+    #evszam; //Ez egy privát változó
+    #sikeres; //Ez egy privát változó
+
+    get forradalom(){//Ez egy getter, amivel elérjük a forradalom változót
+        return this.#forradalom;//Visszatér a forradalom értékével
+    }
+
+    get evszam(){//Ez egy getter, amivel elérjük az évszám változót
+        return this.#evszam;//Visszatér az évszám értékével
+    }
+
+    get sikeres(){//Ez egy getter, amivel elérjük a sikeres változót
+        return this.#sikeres;//Visszatér a sikeres értékével
+    }
+
+    constructor(forradalom, evszam, sikeres){//Ez a konstruktor létrehozza az objektumot
+        this.#forradalom = forradalom;//A forradalom értéke a bemeneti paraméter
+        this.#evszam = evszam;//Az évszám értéke a bemeneti paraméter
+        this.#sikeres = sikeres;//A sikeres értéke a bemeneti paraméter
+    }
+}
