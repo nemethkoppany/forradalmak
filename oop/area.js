@@ -35,11 +35,6 @@ class Area{//Készítünk egy Area osztályt
         this.#div = document.createElement("div");//Készítünk egy divet
         this.#div.className = NameOfTheClass;//Megadjuk a class nevét
         container.appendChild(this.#div);//Hozzáadjuk a containerhez
-        if(!container){//Ha nincs ilyen elem
-            container = document.createElement("div");//Készítünk egy div-et
-            container.className = "containeroop";//És megadjuk neki ezt a class-t
-            document.body.appendChild(container);//És hozzáappendeljük a body-hoz
-        }
     }
     /**
      * 
@@ -111,6 +106,9 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
 }
 
 class Form extends Area{//Az Area osztály leszármazottja a Form osztály
+
+    #arrayOfFormField;//Privát változó
+
     /**
      * 
      * @param {string} NameOfTheClass 
@@ -119,48 +117,16 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
      */
     constructor(NameOfTheClass,formFields, manager){//Konstruktor hátom bemeneti paraméterrel
         super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
-
+        this.#arrayOfFormField = [];
 
         const formOOP = document.createElement("form");//Készítünk egy formot
         this.div.appendChild(formOOP);//Ezt hozzérakjuk a az Area-ban létrehozott div-hez
  
         
         for(const fieldElement of formFields){//Végigmegyünk a tömbön
-            const field = divMaker("field");//készítünk egy divet field class névvel
-            formOOP.appendChild(field);//Hozzárakjuk a form-hoz a field-et
-        
-            const label = document.createElement("label");//Készítünk egy labelt
-            label.htmlFor = fieldElement.fieldid;//A label "id"-je (vagy inkább for-ja) az aktuális elem id-je lesz
-            label.innerHTML = fieldElement.fieldLabel;//Ugyan így a textContent
-            field.appendChild(label);//És ezt hozzárakjuk a fieldhez
-        
-
-        
-            if(fieldElement.fieldid === "success"){//Hogyha a fejlécnél elértünk a "sikeres" mezőhöz
-                const select = document.createElement("select");//Hozzunk létre egy legördülő menüt
-                select.id = fieldElement.fieldid;//Adjuk meg a select id-jét
-        
-                const yesOption = document.createElement("option");//Első opció
-                yesOption.value = "igen";//Az értéke yes
-                yesOption.innerHTML = "igen";//Anmit kiír: igen
-        
-                const noOption = document.createElement("option");//Első opció
-                noOption.value = "nem";//Az értéke no
-                noOption.innerHTML = "nem";//Anmit kiír: nem
-        
-                select.appendChild(yesOption);//Hozzárakjuk az opciót az inputhoz
-                select.appendChild(noOption);//Hozzárakjuk az opciót az inputhoz
-        
-                field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
-                field.appendChild(select);//Ezt az egészet belerakjuk a field-be
-            }
-            else{//Ha még nem vagyunk a selectnél
-                const input = document.createElement("input");//Csak input fieldet hozzunk létre
-                input.id = fieldElement.fieldid;//Aminek ugyan az az id-je mint ami az objektumok tuéajdonságainak
-                field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és legördülő menü
-                field.appendChild(input);//Ezt az egészet belerakjuk a field-be
-            }
-            
+          const fieldOfForm = new FieldOfFormClass(fieldElement.fieldid, fieldElement.fieldLabel);//Készítünk egy új FieldOfFormClass objektumot a tömb aktuális elemével
+          this.#arrayOfFormField.push(fieldOfForm);//Hozzáadjuk a fieldOfForm-ot az arrayOfFormField tömbhöz
+            formOOP.appendChild(fieldOfForm.getDiv());//Hozzáadjuk a formhoz a fieldOfForm-ot
         }
         const button = document.createElement("button");//Készítünk egy gombot
         button.textContent = "Hozzáadás";//Amibe ez lesz írva
@@ -180,4 +146,97 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
         });
     }
 
+}
+
+class FieldOfFormClass{
+
+    /**
+     * @param {string} id
+     */
+    #id;//Privát változó
+    
+    /**
+     * @param {HTMLInputElement} input_element
+     */
+    #input_element//Privát változó
+
+    /**
+     * @param {HTMLLabelElement} label_element  
+     */
+    #label_element//Privát változó
+
+    /**
+     * @param {HTMLSpanElement} error_element
+     */
+    #error_element//Privát változó
+
+    /**
+     * @returns {string}
+     */
+    get id(){//Csinálunk neki egy gettert, hogy el tudjuk érni a változó
+        return this.#id;//Visszatér a #id értékével
+    }
+
+    /**
+     * @returns {string}
+    */
+    get input_element_value(){//Csinálunk neki egy gettert, hogy el tudjuk érni a változó
+        return this.#input_element.value;//Visszatér a #input_element értékével
+    }
+
+
+    set error_element_value(value){//Csinálunk neki egy settert, hogy el tudjuk érni a változó
+        this.#error_element.textContent = value;//Beállítjuk a #error_element értékét
+    }
+    
+    /**
+     * 
+     * @param {string} id 
+     * @param {string} label_value 
+     */
+    constructor(id, label_value){//Konstruktor két bemeneti paraméterrel
+        this.#id = id;//Az id értéke a bemeneti paraméter lesz
+        this.#label_element = document.createElement("label");//Készítünk egy labelt
+        this.#label_element.htmlFor = id;//A label "id"-je (vagy inkább for-ja) az aktuális elem id-je lesz
+        this.#label_element.textContent = label_value;//Ugyan így a textContent
+
+        if(id === "success"){//Hogyha a fejlécnél elértünk a "sikeres" mezőhöz
+            this.#input_element  = document.createElement("select");//Hozzunk létre egy legördülő menüt
+            this.#input_element.id = id;//Adjuk meg a select id-jét
+    
+            const yesOption = document.createElement("option");//Első opció
+            yesOption.value = "igen";//Az értéke yes
+            yesOption.innerHTML = "igen";//Anmit kiír: igen
+    
+            const noOption = document.createElement("option");//Első opció
+            noOption.value = "nem";//Az értéke no
+            noOption.innerHTML = "nem";//Anmit kiír: nem
+    
+            this.#input_element.appendChild(yesOption);//Hozzárakjuk az opciót az inputhoz
+            this.#input_element.appendChild(noOption);//Hozzárakjuk az opciót az inputhoz
+        }
+        else{//Ha még nem vagyunk a selectnél
+            this.#input_element  = document.createElement("input");//Csak input fieldet hozzunk létre
+            this.#input_element.id = id//Aminek ugyan az az id-je mint ami az objektumok tuéajdonságainak
+           
+
+        }
+        this.#error_element = document.createElement("span");//Készítünk egy span-t, amibe belekerülnek a hibák
+        this.#error_element.className = "error";//Ennek a class-a error lesz
+    }    
+
+    /**
+     * 
+     * @returns {HTMLDivElement}
+     */
+    getDiv(){
+        const div = divMaker("field");//készítünk egy divet field class névvel
+        const breakPoint1 = document.createElement("br");//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
+        const breakPoint2 = document.createElement("br");//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
+        const elementsOfHTML = [this.#label_element, breakPoint1, this.#input_element, breakPoint2, this.#error_element];//Készítünk egy tömböt amibe belekerülnek a HTML elemek
+        for(const element  of elementsOfHTML){//Végigmegyünk a tömbön
+            div.appendChild(element);//Hozzáadjuk a div-hez az aktuális elemet
+        }
+        return div;//Visszatérünk a div-el
+    }
 }

@@ -99,6 +99,10 @@ const button = document.createElement("button");//Készítünk egy gombot
 button.textContent = "Hozzáadás";//Amibe ez lesz írva
 Simaform.appendChild(button);//És azt hozzárakjuk a fprm-hoz
 
+/**
+ * @param {object} e
+ * @param {HTMLFormElement} form
+ */
 Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a form submit eseményére
     e.preventDefault();//Megakadályozzuk az alapétertelmezett lefutást
 
@@ -139,6 +143,7 @@ Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a 
     const sikerCell = document.createElement("td");//Készítünk egy td-t
     sikerCell.textContent = objectifyingUserResponse.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
     tr.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
+
     }
 });
 
