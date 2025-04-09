@@ -88,6 +88,11 @@ for(const fieldElement of fieldElements){//Végigmegyünk a tömbön
         field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és legördülő menü
         field.appendChild(input);//Ezt az egészet belerakjuk a field-be
     }
+
+    field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a hibaüzenet és a beviteli mező
+    const error = document.createElement("span");//Készítünk egy span-t, amibe belekerül majd a hibaüzenet
+    error.className = "error";//Ennek a class-a error lesz
+    field.appendChild(error);//Ezt hozzárakjuk a field-hez
     
 }
 const button = document.createElement("button");//Készítünk egy gombot
@@ -99,9 +104,22 @@ Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a 
 
     const objectifyingUserResponse = {};//Készítünk egy üres objektumot, amibe belekerülnek a felhasználó által megadott értékek
     const fieldsOfInput = e.target.querySelectorAll("input, select");//Kiválasztjuk az összes inputot és selectet a formon belül
-    for (const inputField of fieldsOfInput) {//Végigmegyünk a fieldsOfInput minden elemén
-        objectifyingUserResponse[inputField.id] = inputField.value; //Az objektumunkba belekerülnek a felhasználó által megadott értékek, az id-jük alapján
+   
+    let isValid = true;//Készítünk egy valid változót, ami alapértelmezetten igaz
+    for(const inputofFields of fieldsOfInput){//Végigmegyünk az objektumon
+        const error = inputofFields.parentElement.querySelector(".error");//Kiválasztjuk a szülő elemét és azon belül a hibát
+        if(!error){//Ha nincs hiba elem
+            console.error("Nem található error elem!");//Ha nem található error elem, akkor kiírjuk a konzolra
+            return;//Kilépünk a függvényből
+        }
+        error.textContent = "";//A hibaüzenet szövege üres lesz
+        if(inputofFields.value === ""){//Ha az input mező üres
+            isValid = false;//A valid változó hamis lesz
+            error.textContent = "Kötelező kitölteni!";//És kiírjuk a hibaüzenetet
+        }
+        objectifyingUserResponse[inputofFields.id] = inputofFields.value;//Az objektumba belekerül az input id-ja ami egyenlő lesz az input value-jával
     }
+    if(isValid){//Ha az isValid változó igaz 
 
     tomb.push(objectifyingUserResponse); //Hozzáadjuk a tomb-hoz az objektumot
 
@@ -121,6 +139,7 @@ Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a 
     const sikerCell = document.createElement("td");//Készítünk egy td-t
     sikerCell.textContent = objectifyingUserResponse.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
     tr.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
+    }
 });
 
 containerDiv.appendChild(tableDiv);//Hozzárakjuk a containerdiv-hez a tableDiv-et
