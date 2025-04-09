@@ -136,14 +136,20 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
             e.preventDefault();
             const objectifyingUserResponse = {};//Készítünk egy üres objektumot, amibe belekerülnek a felhasználó által megadott értékek
 
-            const fieldsOfInput = e.target.querySelectorAll("input, select");//Kiválasztjuk az összes inputot és selectet a formon belül
-            for(const fieldOfInput of fieldsOfInput){//Végigmegyünk a fieldsOfInput minden elemén
-                objectifyingUserResponse[fieldOfInput.id] = fieldOfInput.value;//Az objektumunkba belekerülnek a felhasználó által megadott értékek, az id-jük alapján
+            let isValid = true;//Készítünk egy valid változót, aminek az értéke true
+            for(const fieldOfForm of this.#arrayOfFormField){//Végigmegyünk a tömbön
+                fieldOfForm.error_element_value = "";//A hibaüzenet szövege üres lesz
+                if(fieldOfForm.input_element_value === ""){//Ha az input mező üres
+                    isValid = false;//A valid változó hamis lesz
+                    fieldOfForm.error_element_value = "Kötelező kitölteni!";//És kiírjuk a hibaüzenetet
+                }
+                objectifyingUserResponse[fieldOfForm.id] = fieldOfForm.input_element_value;//Az objektumba belekerül az input id-ja ami egyenlő lesz az fieldOFForm value-jával
             }
-
-            const data = new ForradalomData(objectifyingUserResponse.revolution, objectifyingUserResponse.year, objectifyingUserResponse.success);//Készítünk egy új ForradalomData objektumot a felhasználó által megadott értékekkel
-            this.manager.addData(data);//Hozzáadjuk a managerhez az új ForradalomData objektumot
-        });
+            if(isValid){//Ha az isValid változó igaz
+                const data = new ForradalomData(objectifyingUserResponse.revolution, objectifyingUserResponse.year, objectifyingUserResponse.success);//Készítünk egy új ForradalomData objektumot a felhasználó által megadott értékekkel
+                this.manager.addData(data);//Hozzáadjuk a managerhez az új ForradalomData objektumot
+            }
+         });
     }
 
 }
@@ -234,8 +240,8 @@ class FieldOfFormClass{
         const breakPoint1 = document.createElement("br");//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
         const breakPoint2 = document.createElement("br");//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
         const elementsOfHTML = [this.#label_element, breakPoint1, this.#input_element, breakPoint2, this.#error_element];//Készítünk egy tömböt amibe belekerülnek a HTML elemek
-        for(const element  of elementsOfHTML){//Végigmegyünk a tömbön
-            div.appendChild(element);//Hozzáadjuk a div-hez az aktuális elemet
+        for(const elementOFHTML  of elementsOfHTML){//Végigmegyünk a tömbön
+            div.appendChild(elementOFHTML);//Hozzáadjuk a div-hez az aktuális elemet
         }
         return div;//Visszatérünk a div-el
     }
