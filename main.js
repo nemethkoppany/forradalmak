@@ -127,8 +127,6 @@ Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a 
 
     tomb.push(objectifyingUserResponse); //Hozzáadjuk a tomb-hoz az objektumot
 
-
-    
     const tr = document.createElement("tr");//Készítünk egy tr-t
     tbody.appendChild(tr);//Hozzáadjuk a tbody-hoz a tr-t
 
@@ -146,6 +144,47 @@ Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a 
 
     }
 });
-
 containerDiv.appendChild(tableDiv);//Hozzárakjuk a containerdiv-hez a tableDiv-et
 containerDiv.appendChild(formDiv);//Hozzárakjuk a containerDiv-hez a formDiv-et
+
+const fileInputField = document.createElement("input");//Készítünk egy file inputot
+    containerDiv.appendChild(fileInputField);//Hozzáadjuk a containerDiv-hez
+    fileInputField.type = "file";//A file input típusa file lesz
+    fileInputField.id = "fileInput";//Az id-ja fileInput lesz
+
+
+    fileInputField.addEventListener("change", (e) => {//Csinálunk egy eseménykezelőt a file input változására
+            const file_TheOnlyOne = e.target.files[0];//Kiválasztjuk az első fájlt
+            const fileReader = new FileReader();//Készítünk egy FileReader-t
+            fileReader.onload = () => {//Csinálunk egy eseménykezelőt a fájl betöltésére
+                const fileText = fileReader.result.split('\n');//A fájl tartalmát egy tömbbe rakjuk, ahol a sorok külön elemek lesznek
+                const removeHeader = fileText.slice(1);//Az első elemet eltávolítjuk a tömbből, mert az a fejléc
+                for(const line of removeHeader){//Végigmegyünk a tömbön
+                    const lineTrimmer_3000 = line.trim();//A sorokból levágjuk a spaceeket
+                    const fields = lineTrimmer_3000.split(";");//A sorokat pontosvesszők mentén felbontjuk egy újabb tömbbe
+                    const forradalom = {
+                        forradalom: fields[0],//Az első elem a forradalom
+                        evszam: fields[1],//A második elem az évszám
+                        sikeres: fields[2]//A harmadik elem a sikeres
+                    }
+
+                    tomb.push(forradalom);//Hozzáadjuk a tomb-hoz az objektumot
+                    const row = document.createElement("tr");//Készítünk egy tr-t
+                    tbody.appendChild(row);//Hozzáadjuk a tbody-hoz 
+
+                    const forradalomCell = document.createElement("td");//Készítünk egy td-t
+                    forradalomCell.textContent = forradalom.forradalom; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
+                    row.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
+
+                    const evszamCell = document.createElement("td");//Készítünk egy td-t
+                    evszamCell.textContent = forradalom.evszam; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
+                    row.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
+
+                    const sikerCell = document.createElement("td");//Készítünk egy td-t
+                    sikerCell.textContent = forradalom.sikeres; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
+                    row.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
+                }
+            };
+            fileReader.readAsText(file_TheOnlyOne);//A fájlt szövegként olvassuk be
+
+        });
