@@ -154,6 +154,35 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 
 }
 
+class FileUploader extends Area{//Az Area osztály leszármazottja az Upload osztály
+    constructor(NameOfTheClass, manager){//Konstruktor két bemeneti paraméterrel
+        super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
+
+        const inputElement = document.createElement("input");//Készítünk egy input elemet
+        inputElement.id = "fileinput";//Az id-ja file lesz
+        inputElement.type = "file";//A típusa file lesz
+        this.div.appendChild(inputElement);//Hozzáadjuk a div-hez
+        inputElement.addEventListener("change", (e) => {//Hozzáadunk egy eseményfigyelőt az inputhoz
+            const file_TheOnlyOnes = e.target.files[0];//A file_TheOnlyOnes változó értéke az input fájl-ja
+            const reader = new FileReader();//Készítünk egy új FileReader-t
+            reader.onload = () =>{//Amikor betöltődött a fájl
+                const fileText = reader.result.split('\n');//A fileText változó értéke a fájl tartalma, amit sorokra bontunk
+                const removeHeader = fileText.slice(1);//Eltávolítjuk az első elemet
+                for(const line of removeHeader){//Végigmegyünk a tömbön
+                   const lineTrimmer_9000 = line.trim();//Eltávolítjuk a felesleges szóközöket
+                   const splittedFields = lineTrimmer_9000.split(";");//A pontosvesszők mentén elválasztjuk az adatokat
+
+                   const forradalomData = new ForradalomData(splittedFields[0], Number(splittedFields[1]), splittedFields[2]);//Készítünk egy új ForradalomData objektumot a fájl aktuális sorával
+                   this.manager.addData(forradalomData);//Hozzáadjuk a managerhez az új ForradalomData objektumot
+                }
+               
+            }
+            reader.readAsText(file_TheOnlyOnes);//A reader beolvassa a fájlt 
+        });
+
+    }
+}
+
 class FieldOfFormClass{
 
     /**
@@ -246,3 +275,4 @@ class FieldOfFormClass{
         return div;//Visszatérünk a div-el
     }
 }
+

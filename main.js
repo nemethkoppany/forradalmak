@@ -158,7 +158,7 @@ const fileInputField = document.createElement("input");//Készítünk egy file i
             const fileReader = new FileReader();//Készítünk egy FileReader-t
             fileReader.onload = () => {//Csinálunk egy eseménykezelőt a fájl betöltésére
                 const fileText = fileReader.result.split('\n');//A fájl tartalmát egy tömbbe rakjuk, ahol a sorok külön elemek lesznek
-                const removeHeader = fileText.slice(1);//Az első elemet eltávolítjuk a tömbből, mert az a fejléc
+                const removeHeader = fileText.slice(1);//Az első elemet eltávolítjuk a tömbből
                 for(const line of removeHeader){//Végigmegyünk a tömbön
                     const lineTrimmer_3000 = line.trim();//A sorokból levágjuk a spaceeket
                     const fields = lineTrimmer_3000.split(";");//A sorokat pontosvesszők mentén felbontjuk egy újabb tömbbe
