@@ -19,4 +19,4 @@ const formFields = [{//Egx tümb deklarálása, amiben 3 objektum lesz
 const manager = new Manager();//Példányosítjuk az Manager osztályt
 const table = new Table("table", manager);//Példányosítjuk az Table osztályt
 const form = new Form("form",formFields, manager);//Példányosítjuk az Form osztályt
-const fileUploader = new FileUploader("upload", manager);//Példányosítjuk az FileUploader osztályt
+const fileUploader = new FileUploaderAndDownloader("upload", manager);//Példányosítjuk az FileUploader osztályt

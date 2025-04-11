@@ -154,7 +154,7 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 
 }
 
-class FileUploader extends Area{//Az Area osztály leszármazottja az Upload osztály
+class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja az Upload osztály
     constructor(NameOfTheClass, manager){//Konstruktor két bemeneti paraméterrel
         super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
 
@@ -178,6 +178,19 @@ class FileUploader extends Area{//Az Area osztály leszármazottja az Upload osz
                
             }
             reader.readAsText(file_TheOnlyOnes);//A reader beolvassa a fájlt 
+        });
+
+        const downloadButton = document.createElement("button");//Készítünk egy gombot
+        downloadButton.textContent = "Letöltés";//Amibe ez lesz írva
+        this.div.appendChild(downloadButton);//És azt hozzárakjuk a div-hez
+        downloadButton.addEventListener("click", () => {//Hozzáadunk egy eseményfigyelőt a gombhoz
+            const link = document.createElement("a");//Készítünk egy linket
+            const fileContent = this.manager.downloader9000();//meghívjük a letöltős függvényt
+            const blob = new Blob([fileContent]);//Letölthető blob készítése
+            link.href = URL.createObjectURL(blob);//Ideiglenes URL, hogy letölthető legyen a fájl
+            link.download = "tovabbi_forradalom.csv";//A letöltendő fájl neve
+            link.click();//A linkre kattintás
+            URL.revokeObjectURL(link.href);//A link eltávolítása
         });
 
     }

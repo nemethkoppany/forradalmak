@@ -32,5 +32,11 @@ class Manager{
         this.#addForradalom_dataCallback(data);//A privát változó értékét meghívjuk
     }
 
-   
+   downloader9000(){
+    const data = ["forradalom,évszám,sikeres"];//Egy tömb létrehozása, amiben a fejléc van
+    for(const forradalom of this.#tomb){//Végigmegyünk a privát tömbön
+        data.push(`${forradalom.forradalom};${forradalom.evszam};${forradalom.sikeres}`);//A tömbhöz hozzáadjuk az új sorokat
+    }
+    return data.join("\n");//Visszatérünk a tömbbel, amit egy stringgé alakítunk
+   }
 }
