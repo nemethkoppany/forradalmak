@@ -167,7 +167,6 @@ const fileInputField = document.createElement("input");//Készítünk egy file i
                         evszam: fields[1],//A második elem az évszám
                         sikeres: fields[2]//A harmadik elem a sikeres
                     }
-
                     tomb.push(forradalom);//Hozzáadjuk a tomb-hoz az objektumot
                     const row = document.createElement("tr");//Készítünk egy tr-t
                     tbody.appendChild(row);//Hozzáadjuk a tbody-hoz 
