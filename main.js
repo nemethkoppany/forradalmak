@@ -188,3 +188,20 @@ const fileInputField = document.createElement("input");//Készítünk egy file i
             fileReader.readAsText(file_TheOnlyOne);//A fájlt szövegként olvassuk be
 
         });
+
+        const downloadButton = document.createElement("button");//Készítünk egy gombot
+        downloadButton.textContent = "Letöltés";//Amibe ez lesz írva
+        containerDiv.appendChild(downloadButton);//És azt hozzárakjuk a div-hez
+        downloadButton.addEventListener("click", () => {//Csinálunk egy eseménykezelőt a gombra
+            const link = document.createElement("a");//Készítünk egy linket
+            const arrayOfContents = ["forradalom;évszám;sikeres"];//Készítünk egy tömböt, amiben a fejléc van
+            for(const forradalom of tomb){//Végigmegyünk a tomb-ön
+                arrayOfContents.push(`${forradalom.revolution};${forradalom.year};${forradalom.success}`);//A tömbhöz hozzáadjuk az adatsorokat
+            }
+            const fileContent = arrayOfContents.join("\n");//A tömböt egy stringgé alakítjuk, ahol soronként elválasztjuk őket
+            const blob = new Blob([fileContent]);//A stringet blobba rakjuk, hogy letölthető legyen
+            link.href = URL.createObjectURL(blob);//Ideiglenes URL, hogy letölthető legyen a fájl
+            link.download = "tovabbi_forradalmak.csv";//A letöltött fájl neve ez lesz
+            link.click();//Rákattintunk a linkre, hogy letöltődjön
+            URL.revokeObjectURL(link.href);//A blob URL-jét visszavonjuk
+        });
