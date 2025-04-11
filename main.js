@@ -186,7 +186,6 @@ const fileInputField = document.createElement("input");//Készítünk egy file i
                 }
             };
             fileReader.readAsText(file_TheOnlyOne);//A fájlt szövegként olvassuk be
-
         });
 
         const downloadButton = document.createElement("button");//Készítünk egy gombot
