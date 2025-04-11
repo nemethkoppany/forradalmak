@@ -32,7 +32,11 @@ class Manager{
         this.#addForradalom_dataCallback(data);//A privát változó értékét meghívjuk
     }
 
-   downloader9000(){
+    /**
+     * 
+     * @returns {string} 
+     */
+   downloader9000(){//Letöltéshez szükséges függvény
     const data = ["forradalom,évszám,sikeres"];//Egy tömb létrehozása, amiben a fejléc van
     for(const forradalom of this.#tomb){//Végigmegyünk a privát tömbön
         data.push(`${forradalom.forradalom};${forradalom.evszam};${forradalom.sikeres}`);//A tömbhöz hozzáadjuk az új sorokat

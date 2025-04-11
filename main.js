@@ -10,6 +10,16 @@ const divMaker = (NameOfTheClass) => {//Arrow function egy bemeneti paraméterre
     return div;//Visszatérünk a divvel
 }
 
+const filter = (forradalomArray, callback) => {//Készítünk egy filter függvényt, ami egy tömböt és egy callback függvényt vár bemeneti paraméterként
+    const filteredArray = [];//Készítünk egy üres tömböt, amibe a szűrt elemek kerülnek
+    for(const forradalom of forradalomArray){//Végigmegyünk a bemeneti tömbön
+        if(callback(forradalom)){//Ha a callback függvény visszatérési értéke igaz
+            filteredArray.push(forradalom);//A szűrt tömbhöz hozzáadjuk az aktuális elemet
+        }
+    }
+    return filteredArray;//Visszatérünk a szűrt tömbbel
+}
+
 const containerDiv = divMaker("container");//Készítünk egy div-et aminke a class-a container lesz
 document.body.appendChild(containerDiv);//Hozzárakjuk a body-hoz a containerDiv-et
 const tableDiv = divMaker("table");//Készítünk egy table div-et
@@ -163,24 +173,24 @@ const fileInputField = document.createElement("input");//Készítünk egy file i
                     const lineTrimmer_3000 = line.trim();//A sorokból levágjuk a spaceeket
                     const fields = lineTrimmer_3000.split(";");//A sorokat pontosvesszők mentén felbontjuk egy újabb tömbbe
                     const forradalom = {
-                        forradalom: fields[0],//Az első elem a forradalom
-                        evszam: fields[1],//A második elem az évszám
-                        sikeres: fields[2]//A harmadik elem a sikeres
+                        revolution: fields[0],//Az első elem a forradalom
+                        year: fields[1],//A második elem az évszám
+                        success: fields[2]//A harmadik elem a sikeres
                     }
                     tomb.push(forradalom);//Hozzáadjuk a tomb-hoz az objektumot
                     const row = document.createElement("tr");//Készítünk egy tr-t
                     tbody.appendChild(row);//Hozzáadjuk a tbody-hoz 
 
                     const forradalomCell = document.createElement("td");//Készítünk egy td-t
-                    forradalomCell.textContent = forradalom.forradalom; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
+                    forradalomCell.textContent = forradalom.revolution; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
                     row.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
 
                     const evszamCell = document.createElement("td");//Készítünk egy td-t
-                    evszamCell.textContent = forradalom.evszam; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
+                    evszamCell.textContent = forradalom.year; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
                     row.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
 
                     const sikerCell = document.createElement("td");//Készítünk egy td-t
-                    sikerCell.textContent = forradalom.sikeres; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
+                    sikerCell.textContent = forradalom.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
                     row.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
                 }
             };
@@ -202,4 +212,89 @@ const fileInputField = document.createElement("input");//Készítünk egy file i
             link.download = "tovabbi_forradalmak.csv";//A letöltött fájl neve ez lesz
             link.click();//Rákattintunk a linkre, hogy letöltődjön
             URL.revokeObjectURL(link.href);//A blob URL-jét visszavonjuk
+        });
+
+
+        const divForFilterForm = divMaker("filterForm");//Készítünk egy divet, aminek a class-a filterForm lesz
+        containerDiv.appendChild(divForFilterForm);//Hozzáadjuk a containerDiv-hez
+
+        const filterForm = document.createElement("form");//Készítünk egy formot
+        divForFilterForm.appendChild(filterForm);//Hozzáadjuk a filterForm-hoz
+        const select = document.createElement("select");//Készítünk egy selectet
+        filterForm.appendChild(select);//Hozzáadjuk a filterForm-hoz
+        const options = [{
+            value: "",//A legördülő menü első opciója
+            innerText:""//Nincs szöveg
+        },
+        {
+            value: "revolution",//A legördülő menü második opciója
+            innerText:"forradalom"//A szövege forradalom
+        },
+        {
+            value: "year", //A legördülő menü harmadik opciója
+            innerText:"évszám"  //A szövege évszám
+        },
+        {
+            value: "success", //A legördülő menü negyedik opciója
+            innerText:"sikeres" //A szövege sikeres
+        }];
+
+        for(const option of options){//Végigmegyünk a tömbön
+            const optionElement = document.createElement("option");//Készítünk egy opciót
+            optionElement.value = option.value;//Az értéke az aktuális elem értéke lesz
+            optionElement.innerText = option.innerText;//A szövege az aktuális elem szövege lesz
+            select.appendChild(optionElement);//Hozzáadjuk a select-hez
+        }
+
+        const input = document.createElement("input");//Készítünk egy inputot
+        input.id = "filterInput";//Az id-ja filterInput lesz
+        filterForm.appendChild(input);//Hozzáadjuk a filterForm-hoz
+
+        const Filterbutton = document.createElement("button");//Készítünk egy gombot
+        Filterbutton.innerText = "Szűrés";//A gomb szövege ez lesz
+        filterForm.appendChild(Filterbutton);//Hozzáadjuk a filterForm-hoz
+        filterForm.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a filterForm submit eseményére
+            e.preventDefault();//Megakadályozzuk az alapértelmezett viselkedést
+
+            const filteringInput = e.target.querySelector("#filterInput");//Kiválasztjuk a filterInputot
+            const selectFilter = e.target.querySelector("select");//Kiválasztjuk a selectet
+
+            const arrayThatsFiltered = filter(tomb, (forradalom) => {//Készítünk egy szűrt tömböt, ami a filter függvény visszatérési értéke lesz
+                if(selectFilter.value == "revolution"){//Ha a select értéke revolution
+                    if(filteringInput.value === forradalom.revolution){//Ha a filterInput értéke megegyezik a forradalom értékével
+                        return true;//Térjünk vissza igaz értékkel
+                    }
+                }
+                else if(selectFilter.value == "year"){//Ha a select értéke year
+                    if(filteringInput.value === forradalom.year){//Ha a filterInput értéke megegyezik az évszám értékével
+                        return true;//Térjünk vissza igaz értékkel
+                    }
+                }
+                else if(selectFilter.value == "success"){//Ha a select értéke success
+                    if(filteringInput.value === forradalom.success){//Ha a filterInput értéke megegyezik a sikeres értékével
+                        return true;//Térjünk vissza igaz értékkel
+                    }
+                }
+                else{
+                    return true;//Ha egyik sem, akkor is térjünk vissza igaz értékkel
+                }
+            });
+            tbody.innerHTML = "";//A tbody tartalmát töröljük
+
+            for(const forradalom of arrayThatsFiltered){//Végigmegyünk a szűrt tömbön
+                const row = document.createElement("tr");//Készítünk egy tr-t
+                tbody.appendChild(row);//Hozzáadjuk a tbody-hoz 
+
+                const forradalomCell = document.createElement("td");//Készítünk egy td-t
+                forradalomCell.textContent = forradalom.revolution; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
+                row.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
+
+                const evszamCell = document.createElement("td");//Készítünk egy td-t
+                evszamCell.textContent = forradalom.year; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
+                row.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
+
+                const sikerCell = document.createElement("td");//Készítünk egy td-t
+                sikerCell.textContent = forradalom.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
+                row.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
+            }
         });
