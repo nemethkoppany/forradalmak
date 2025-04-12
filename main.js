@@ -1,13 +1,14 @@
-const tomb = [];//Eltárolunk egy tömböt egy változóban
+const tomb = []; // Eltárolunk egy tömböt egy változóban
+
 /**
  * 
  * @param {string} NameOfTheClass 
  * @returns {HTMLDivElement}
  */
-const divMaker = (NameOfTheClass) => {//Arrow function egy bemeneti paraméterrel
-    const div = document.createElement("div");//div element létrehozása
-    div.className = NameOfTheClass;//Ennek a div elementnek adunk egy className-et (Ezt a classname-et majd mi adjuk meg)
-    return div;//Visszatérünk a divvel
+const divMaker = (NameOfTheClass) => { // Arrow function egy bemeneti paraméterrel
+    const div = document.createElement("div"); // div element létrehozása
+    div.className = NameOfTheClass; // Ennek a div elementnek adunk egy className-et (Ezt a classname-et majd mi adjuk meg)
+    return div; // Visszatérünk a divvel
 }
 
 /**
@@ -16,288 +17,288 @@ const divMaker = (NameOfTheClass) => {//Arrow function egy bemeneti paraméterre
  * @param {(forradalom: ForradalomData): boolean} callback - A szűrési feltételeket meghatározó függvény. 
  * @returns {Array<ForradalomData>} - A szűrési feltételeknek megfelelő elemeket tartalmazó tömb. 
  */
-const filter = (forradalomArray, callback) => {//Készítünk egy filter függvényt, ami egy tömböt és egy callback függvényt vár bemeneti paraméterként
-    const filteredArray = [];//Készítünk egy üres tömböt, amibe a szűrt elemek kerülnek
-    for(const forradalom of forradalomArray){//Végigmegyünk a bemeneti tömbön
-        if(callback(forradalom)){//Ha a callback függvény visszatérési értéke igaz
-            filteredArray.push(forradalom);//A szűrt tömbhöz hozzáadjuk az aktuális elemet
+const filter = (forradalomArray, callback) => { // Készítünk egy filter függvényt, ami egy tömböt és egy callback függvényt vár bemeneti paraméterként
+    const filteredArray = []; // Készítünk egy üres tömböt, amibe a szűrt elemek kerülnek
+    for (const forradalom of forradalomArray) { // Végigmegyünk a bemeneti tömbön
+        if (callback(forradalom)) { // Ha a callback függvény visszatérési értéke igaz
+            filteredArray.push(forradalom); // A szűrt tömbhöz hozzáadjuk az aktuális elemet
         }
     }
-    return filteredArray;//Visszatérünk a szűrt tömbbel
+    return filteredArray; // Visszatérünk a szűrt tömbbel
 }
 
-const containerDiv = divMaker("container");//Készítünk egy div-et aminke a class-a container lesz
-document.body.appendChild(containerDiv);//Hozzárakjuk a body-hoz a containerDiv-et
-const tableDiv = divMaker("table");//Készítünk egy table div-et
-
-const tableElement = document.createElement("table");//Készítünk egy HTMLelemet és azt eltároljuk egy változóban
-tableDiv.appendChild(tableElement);//Hozzáadjuk a tableDiv-hez
-
-const header = document.createElement("thead");//Készítünk egy HTMLelemet és azt eltároljuk egy változóban
-tableElement.appendChild(header);//Hozzáadjuk a tableElement-hez
-
-const headerRow = document.createElement("tr");//Készítünk egy HTMLelemet és azt eltároljuk egy változóban
-header.appendChild(headerRow);//Hozzáadjuk a header-höz
-
-const headerText = ["forradalom", "évszám", "sikeres"];//Tömb amiben a fejléc tartalma van
-
-for(const headerCellText of headerText){//Végigmegyünk ezen a tömbön
-    const headerCell = document.createElement("th");//Készítünk egy HTMLelemet és azt eltároljuk egy változóban
-    headerCell.innerText = headerCellText;//Az aktuális elem belekerül a cellába
-    headerRow.appendChild(headerCell);//Hozzáadjuk a headerCell-t a headerRow-hoz
-}
-
-
-const formDiv = divMaker("form");//Készítünk egy divet melynek a class-a form lesz
-
-const Simaform = document.createElement("form");//Készytünk egy formot
-formDiv.appendChild(Simaform);//Ezt hozzérakjuk a formDiv-hez
-
-const tbody = document.createElement("tbody");//Készítünk egy HTMLelemet és azt eltároljuk egy változóban
-tableElement.appendChild(tbody);//Hozzáadjuk a form-hoz
-
-const fieldElements = [{//Egy tömb deklarálása, amiben 3 objektum lesz
-    fieldid: "revolution",//Az első input id-ja
-    fieldLabel: "forrdalom"//Az első input fölé ez lesz írva
-},
-{
-    fieldid: "year",//A második input id-ja
-    fieldLabel: "évszám"//Az második  input fölé ez lesz írva
-},
-{
-    fieldid: "success",//A legördülő menü id-je
-    fieldLabel: "sikeres"//A legördülő menü fölé ez lesz írva
-}
-];
-
-for(const fieldElement of fieldElements){//Végigmegyünk a tömbön
-    const field = divMaker("field");//készítünk egy divet field class névvel
-    Simaform.appendChild(field);//Hozzárakjuk a form-hoz a field-et
-
-    const label = document.createElement("label");//Készítünk egy labelt
-    label.htmlFor = fieldElement.fieldid;//A label "id"-je (vagy inkább for-ja) az aktuális elem id-je lesz
-    label.innerHTML = fieldElement.fieldLabel;//Ugyan így a textContent
-    field.appendChild(label);//És ezt hozzárakjuk a fieldhez
-
-
-    if(fieldElement.fieldid === "success"){//Hogyha a fejlécnél elértünk a "sikeres" mezőhöz
-        const input = document.createElement("select");//Hozzunk létre egy legördülő menüt
-        input.id = fieldElement.fieldid;//Adjuk meg a select id-jét
-
-        const option1 = document.createElement("option");//Első opció
-        option1.value = "igen";//Az értéke nem
-        option1.innerHTML = "igen";//Anmit kiír: igen
-
-        const option2 = document.createElement("option");//Első opció
-        option2.value = "nem";//Az értéke nen
-        option2.innerHTML = "nem";//Anmit kiír: nem
-
-        input.appendChild(option1);//Hozzárakjuk az opciót az inputhoz
-        input.appendChild(option2);//Hozzárakjuk az opciót az inputhoz
-
-        field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és a mező
-        field.appendChild(input);//Ezt az egészet belerakjuk a field-be
-    }
-    else{//Ha még nem vagyunk a selectnél
-        const input = document.createElement("input");//Csak input fieldet hozzunk létre
-        input.id = fieldElement.fieldid;//Aminek ugyan az az id-je mint ami az objektumok tuéajdonságainak
-        field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a szöveg és legördülő menü
-        field.appendChild(input);//Ezt az egészet belerakjuk a field-be
-    }
-
-    field.appendChild(document.createElement("br"));//Csinálunk egy brake-et is, hogy egymás alattt legyen a hibaüzenet és a beviteli mező
-    const error = document.createElement("span");//Készítünk egy span-t, amibe belekerül majd a hibaüzenet
-    error.className = "error";//Ennek a class-a error lesz
-    field.appendChild(error);//Ezt hozzárakjuk a field-hez
+/**
+ * 
+ * @param {HTMLDivElement} div 
+ * @param {function(HTMLElement): void} callback{
     
+ }} callback 
+ */
+const tableCreation = (div, callback) => { // Készítünk egy függvényt, ami létrehozza a táblázatot
+    const divForTable = divMaker("tableDiv"); // Létrehozunk egy divet a táblázatnak
+    div.appendChild(divForTable); // A divhez hozzáadjuk a táblázat divet
+    const table = document.createElement("table"); // Létrehozunk egy táblázatot
+    divForTable.appendChild(table); // A táblázathoz hozzáadjuk a táblázat divet
+    const thead = document.createElement("thead"); // Létrehozunk egy thead elemet
+    table.appendChild(thead); // A táblázathoz hozzáadjuk a thead elemet
+    const tr = document.createElement("tr"); // Létrehozunk egy tr elemet
+    thead.appendChild(tr); // A theadhez hozzáadjuk a tr elemet
+    const th_cells = ["Forradalom", "Évszám", "Sikeres"]; // Létrehozunk egy tömböt, amiben a fejléc cellák nevei vannak
+    for (const cell of th_cells) { // Végigmegyünk a fejléc cellák tömbjén
+        const th = document.createElement("th"); // Létrehozunk egy th elemet
+        th.innerText = cell; // A th elem szövege a cella neve
+        tr.appendChild(th); // A tr-hez hozzáadjuk a th elemet
+    }
+    const tbody = document.createElement("tbody"); // Létrehozunk egy tbody elemet
+    table.appendChild(tbody); // A táblázathoz hozzáadjuk a tbody elemet
+    callback(tbody); // Meghívjuk a callback függvényt, aminek átadjuk a tbody-t
 }
-const button = document.createElement("button");//Készítünk egy gombot
-button.textContent = "Hozzáadás";//Amibe ez lesz írva
-Simaform.appendChild(button);//És azt hozzárakjuk a fprm-hoz
 
 
-Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a form submit eseményére
-    e.preventDefault();//Megakadályozzuk az alapétertelmezett lefutást
-
-    const objectifyingUserResponse = {};//Készítünk egy üres objektumot, amibe belekerülnek a felhasználó által megadott értékek
-    const fieldsOfInput = e.target.querySelectorAll("input, select");//Kiválasztjuk az összes inputot és selectet a formon belül
-   
-    let isValid = true;//Készítünk egy valid változót, ami alapértelmezetten igaz
-    for(const inputofFields of fieldsOfInput){//Végigmegyünk az objektumon
-        const error = inputofFields.parentElement.querySelector(".error");//Kiválasztjuk a szülő elemét és azon belül a hibát
-        if(!error){//Ha nincs hiba elem
-            console.error("Nem található error elem!");//Ha nem található error elem, akkor kiírjuk a konzolra
-            return;//Kilépünk a függvényből
-        }
-        error.textContent = "";//A hibaüzenet szövege üres lesz
-        if(inputofFields.value === ""){//Ha az input mező üres
-            isValid = false;//A valid változó hamis lesz
-            error.textContent = "Kötelező kitölteni!";//És kiírjuk a hibaüzenetet
-        }
-        objectifyingUserResponse[inputofFields.id] = inputofFields.value;//Az objektumba belekerül az input id-ja ami egyenlő lesz az input value-jával
-    }
-    if(isValid){//Ha az isValid változó igaz 
-
-    tomb.push(objectifyingUserResponse); //Hozzáadjuk a tomb-hoz az objektumot
-
-    const tr = document.createElement("tr");//Készítünk egy tr-t
-    tbody.appendChild(tr);//Hozzáadjuk a tbody-hoz a tr-t
-
-    const forradalomCell = document.createElement("td");//Készítünk egy td-t
-    forradalomCell.textContent = objectifyingUserResponse.revolution; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
-    tr.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
-
-    const evszamCell = document.createElement("td");//Készítünk egy td-t
-    evszamCell.textContent = objectifyingUserResponse.year; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
-    tr.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
-
-    const sikerCell = document.createElement("td");//Készítünk egy td-t
-    sikerCell.textContent = objectifyingUserResponse.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
-    tr.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
-
-    }
-});
-containerDiv.appendChild(tableDiv);//Hozzárakjuk a containerdiv-hez a tableDiv-et
-containerDiv.appendChild(formDiv);//Hozzárakjuk a containerDiv-hez a formDiv-et
-
-const fileInputField = document.createElement("input");//Készítünk egy file inputot
-    containerDiv.appendChild(fileInputField);//Hozzáadjuk a containerDiv-hez
-    fileInputField.type = "file";//A file input típusa file lesz
-    fileInputField.id = "fileInput";//Az id-ja fileInput lesz
-
-
-    fileInputField.addEventListener("change", (e) => {//Csinálunk egy eseménykezelőt a file input változására
-            const file_TheOnlyOne = e.target.files[0];//Kiválasztjuk az első fájlt
-            const fileReader = new FileReader();//Készítünk egy FileReader-t
-            fileReader.onload = () => {//Csinálunk egy eseménykezelőt a fájl betöltésére
-                const fileText = fileReader.result.split('\n');//A fájl tartalmát egy tömbbe rakjuk, ahol a sorok külön elemek lesznek
-                const removeHeader = fileText.slice(1);//Az első elemet eltávolítjuk a tömbből
-                for(const line of removeHeader){//Végigmegyünk a tömbön
-                    const lineTrimmer_3000 = line.trim();//A sorokból levágjuk a spaceeket
-                    const fields = lineTrimmer_3000.split(";");//A sorokat pontosvesszők mentén felbontjuk egy újabb tömbbe
+/**
+ * 
+ * @param {HTMLElement} tbody 
+ * @param {HTMLDivElement} div 
+ * @param {tomb[]} forradalomArray 
+ */
+const upload = (tbody, div, forradalomArray) => { // Készítünk egy függvényt, ami feltölti a táblázatot
+    const input = document.createElement("input"); // Létrehozunk egy input elemet
+    div.appendChild(input); // A divhez hozzáadjuk az input elemet
+    input.type = "file"; // Az input típusa file
+    input.id = "fileInput"; // Az input id-ja fileInput
+    input.addEventListener("change", (e) => { // Hozzáadunk egy eseményfigyelőt az inputhoz, ami akkor fut le, ha megváltozik az értéke 
+        const file = e.target.files[0]; // Az input fájlja az első fájl
+        const reader = new FileReader(); // Létrehozunk egy FileReader objektumot
+        reader.onload = () => { // Ha a fájl betöltődött
+            const separatedFile = reader.result.split("\n"); // A fájl tartalmát sorokra bontjuk
+            const noHeader = separatedFile.slice(1); // Az első sort eltávolítjuk (fejléc)
+            for (const line of noHeader) { // Végigmegyünk a fájl sorain
+                const sections = line.split(";"); // A sort pontosvessző mentén felbontjuk
                     const forradalom = {
-                        revolution: fields[0],//Az első elem a forradalom
-                        year: fields[1],//A második elem az évszám
-                        success: fields[2]//A harmadik elem a sikeres
-                    }
-                    tomb.push(forradalom);//Hozzáadjuk a tomb-hoz az objektumot
-                    const row = document.createElement("tr");//Készítünk egy tr-t
-                    tbody.appendChild(row);//Hozzáadjuk a tbody-hoz 
-
-                    const forradalomCell = document.createElement("td");//Készítünk egy td-t
-                    forradalomCell.textContent = forradalom.revolution; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
-                    row.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
-
-                    const evszamCell = document.createElement("td");//Készítünk egy td-t
-                    evszamCell.textContent = forradalom.year; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
-                    row.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
-
-                    const sikerCell = document.createElement("td");//Készítünk egy td-t
-                    sikerCell.textContent = forradalom.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
-                    row.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
-                }
-            };
-            fileReader.readAsText(file_TheOnlyOne);//A fájlt szövegként olvassuk be
-        });
-
-        const downloadButton = document.createElement("button");//Készítünk egy gombot
-        downloadButton.textContent = "Letöltés";//Amibe ez lesz írva
-        containerDiv.appendChild(downloadButton);//És azt hozzárakjuk a div-hez
-        downloadButton.addEventListener("click", () => {//Csinálunk egy eseménykezelőt a gombra
-            const link = document.createElement("a");//Készítünk egy linket
-            const arrayOfContents = ["forradalom;évszám;sikeres"];//Készítünk egy tömböt, amiben a fejléc van
-            for(const forradalom of tomb){//Végigmegyünk a tomb-ön
-                arrayOfContents.push(`${forradalom.revolution};${forradalom.year};${forradalom.success}`);//A tömbhöz hozzáadjuk az adatsorokat
+                        revolution: sections[0].trim(), // A forradalom neve
+                        year: sections[1].trim(), // Az évszám
+                        success: sections[2].trim() // A sikeresség
+                    };
+                    forradalomArray.push(forradalom); // A forradalom objektumot hozzáadjuk a tömbhöz
+                    addARowTOTheTable(tbody, forradalom); // Hozzáadunk egy sort a táblázathoz
             }
-            const fileContent = arrayOfContents.join("\n");//A tömböt egy stringgé alakítjuk, ahol soronként elválasztjuk őket
-            const blob = new Blob([fileContent]);//A stringet blobba rakjuk, hogy letölthető legyen
-            link.href = URL.createObjectURL(blob);//Ideiglenes URL, hogy letölthető legyen a fájl
-            link.download = "tovabbi_forradalmak.csv";//A letöltött fájl neve ez lesz
-            link.click();//Rákattintunk a linkre, hogy letöltődjön
-            URL.revokeObjectURL(link.href);//A blob URL-jét visszavonjuk
-        });
+        };
+        reader.readAsText(file); // Betöltjük a fájlt szövegként
+    });
+};
 
+/**
+ * 
+ * @param {HTMLElement} tbody 
+ * @param {HTMLDivElement} div 
+ * @param {tomb[]} forradalomArray 
+ */
+const formCreation = (tbody, div, forradalomArray) => { // Készítünk egy függvényt, ami létrehozza a formot
+    const divForForm = divMaker("formDiv"); // Létrehozunk egy divet a formnak
+    div.appendChild(divForForm); // A divhez hozzáadjuk a form divet
 
-        const divForFilterForm = divMaker("filterForm");//Készítünk egy divet, aminek a class-a filterForm lesz
-        containerDiv.appendChild(divForFilterForm);//Hozzáadjuk a containerDiv-hez
+    const form = document.createElement("form"); // Létrehozunk egy form elemet
+    divForForm.appendChild(form); // A formhoz hozzáadjuk a form divet
+    const formContentList = [{
+        fieldid: "revolution", // A forradalom id-je
+        fieldLabel: "Forradalom", // A forradalom neve
+    },
+    {
+        fieldid: "year", // Az évszám id-je
+        fieldLabel: "Évszám", // Az évszám neve
+    },
+    {
+        fieldid: "success", // A sikeres id-je
+        fieldLabel: "Sikeres",  // A sikeres neve
+    }
+];
+    for(const fieldElement of formContentList) { // Végigmegyünk a form tartalmán
+        const fieldDiv = divMaker("fieldDiv"); // Létrehozunk egy divet a mezőnek
+        form.appendChild(fieldDiv); // A formhoz hozzáadjuk a mező divet
+        const label = document.createElement("label"); // Létrehozunk egy label elemet
+        label.innerText = fieldElement.fieldLabel; // A label szövege a mező neve
+        label.htmlFor = fieldElement.fieldid; // A label htmlFor attribútuma a mező id-je
+        fieldDiv.appendChild(label); // A mező divhez hozzáadjuk a label elemet
 
-        const filterForm = document.createElement("form");//Készítünk egy formot
-        divForFilterForm.appendChild(filterForm);//Hozzáadjuk a filterForm-hoz
-        const select = document.createElement("select");//Készítünk egy selectet
-        filterForm.appendChild(select);//Hozzáadjuk a filterForm-hoz
-        const options = [{
-            value: "",//A legördülő menü első opciója
-            innerText:""//Nincs szöveg
-        },
-        {
-            value: "revolution",//A legördülő menü második opciója
-            innerText:"forradalom"//A szövege forradalom
-        },
-        {
-            value: "year", //A legördülő menü harmadik opciója
-            innerText:"évszám"  //A szövege évszám
-        },
-        {
-            value: "success", //A legördülő menü negyedik opciója
-            innerText:"sikeres" //A szövege sikeres
-        }];
+        fieldDiv.appendChild(document.createElement("br")); // A mező divhez hozzáadunk egy sortörést
 
-        for(const option of options){//Végigmegyünk a tömbön
-            const optionElement = document.createElement("option");//Készítünk egy opciót
-            optionElement.value = option.value;//Az értéke az aktuális elem értéke lesz
-            optionElement.innerText = option.innerText;//A szövege az aktuális elem szövege lesz
-            select.appendChild(optionElement);//Hozzáadjuk a select-hez
+        if(fieldElement.fieldid == "success") { // Ha a mező id-je sikeres
+            const select = document.createElement("select"); // Létrehozunk egy select elemet
+            select.id = fieldElement.fieldid; // A select id-ja a mező id-je
+
+            const option1 = document.createElement("option"); // Létrehozunk egy option elemet
+            option1.value = "igen"; // Az option értéke igen
+            option1.innerText = "igen"; // Az option szövege igen
+
+            const option2 = document.createElement("option"); // Létrehozunk egy option elemet
+            option2.value = "nem"; // Az option értéke nem
+            option2.innerText = "nem"; // Az option szövege nem
+
+            select.appendChild(option1); // A selecthez hozzáadjuk az első option elemet
+            select.appendChild(option2); // A selecthez hozzáadjuk a második option elemet
+            fieldDiv.appendChild(select); // A mező divhez hozzáadjuk a select elemet
         }
-
-        const input = document.createElement("input");//Készítünk egy inputot
-        input.id = "filterInput";//Az id-ja filterInput lesz
-        filterForm.appendChild(input);//Hozzáadjuk a filterForm-hoz
-
-        const Filterbutton = document.createElement("button");//Készítünk egy gombot
-        Filterbutton.innerText = "Szűrés";//A gomb szövege ez lesz
-        filterForm.appendChild(Filterbutton);//Hozzáadjuk a filterForm-hoz
-        filterForm.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a filterForm submit eseményére
-            e.preventDefault();//Megakadályozzuk az alapértelmezett viselkedést
-
-            const filteringInput = e.target.querySelector("#filterInput");//Kiválasztjuk a filterInputot
-            const selectFilter = e.target.querySelector("select");//Kiválasztjuk a selectet
-
-            const arrayThatsFiltered = filter(tomb, (forradalom) => {//Készítünk egy szűrt tömböt, ami a filter függvény visszatérési értéke lesz
-                if(selectFilter.value == "revolution"){//Ha a select értéke revolution
-                    if(filteringInput.value === forradalom.revolution){//Ha a filterInput értéke megegyezik a forradalom értékével
-                        return true;//Térjünk vissza igaz értékkel
-                    }
-                }
-                else if(selectFilter.value == "year"){//Ha a select értéke year
-                    if(filteringInput.value === forradalom.year){//Ha a filterInput értéke megegyezik az évszám értékével
-                        return true;//Térjünk vissza igaz értékkel
-                    }
-                }
-                else if(selectFilter.value == "success"){//Ha a select értéke success
-                    if(filteringInput.value === forradalom.success){//Ha a filterInput értéke megegyezik a sikeres értékével
-                        return true;//Térjünk vissza igaz értékkel
-                    }
-                }
-                else{
-                    return true;//Ha egyik sem, akkor is térjünk vissza igaz értékkel
-                }
-            });
-            tbody.innerHTML = "";//A tbody tartalmát töröljük
-
-            for(const forradalom of arrayThatsFiltered){//Végigmegyünk a szűrt tömbön
-                const row = document.createElement("tr");//Készítünk egy tr-t
-                tbody.appendChild(row);//Hozzáadjuk a tbody-hoz 
-
-                const forradalomCell = document.createElement("td");//Készítünk egy td-t
-                forradalomCell.textContent = forradalom.revolution; //Az objektumunkból kiválasztjuk a forradalom mezőt (Ez lesz a cella tartalma)
-                row.appendChild(forradalomCell);//Hozzáadjuk a tr-hez a cellát
-
-                const evszamCell = document.createElement("td");//Készítünk egy td-t
-                evszamCell.textContent = forradalom.year; //Az objektumunkból kiválasztjuk az évszám mezőt (Ez lesz a cella tartalma)
-                row.appendChild(evszamCell);//Hozzáadjuk a tr-hez a cellát
-
-                const sikerCell = document.createElement("td");//Készítünk egy td-t
-                sikerCell.textContent = forradalom.success; //Az objektumunkból kiválasztjuk a siker mezőt (Ez lesz a cella tartalma)
-                row.appendChild(sikerCell);//Hozzáadjuk a tr-hez a cellát
+        else{
+            const input = document.createElement("input"); // Létrehozunk egy input elemet
+            input.id = fieldElement.fieldid; // Az input id-ja a mező id-je 
+            fieldDiv.appendChild(input); // A mező divhez hozzáadjuk az input elemet
             }
+
+        fieldDiv.appendChild(document.createElement("br")); // A mező divhez hozzáadunk egy sortörést
+
+        const errorSpan = document.createElement("span"); // Létrehozunk egy span elemet a hibaüzenetnek
+        errorSpan.className = "error"; // A span className-je error
+        fieldDiv.appendChild(errorSpan); // A mező divhez hozzáadjuk a span elemet
+    }
+
+    const submitButton = document.createElement("button"); // Létrehozunk egy gombot
+    submitButton.innerText = "Hozzáadás"; // A gomb szövege Hozzáadás
+    form.appendChild(submitButton); // A formhoz hozzáadjuk a gombot
+    form.addEventListener("submit", (e) => { // Hozzáadunk egy eseményfigyelőt a formhoz, ami akkor fut le, ha elküldjük a formot
+        e.preventDefault(); // Megakadályozzuk az alapértelmezett viselkedést (az oldal újratöltését)
+
+        const objectForValues = {}; // Létrehozunk egy üres objektumot, amibe a mezők értékeit eltároljuk
+        const inputs = e.target.querySelectorAll("input, select"); // Kiválasztjuk az összes input és select elemet a formban
+        let isValid = true; // Létrehozunk egy változót, ami azt jelzi, hogy a mezők érvényesek-e
+        for(const input of inputs) { // Végigmegyünk az inputokon
+         const error = input.parentElement.querySelector(".error"); // Kiválasztjuk a hibaüzenet span elemet
+         if(!error){ // Ha a hibaüzenet span elem nem létezik
+            console.error("Nincs errorfield")
+            return; // Visszatérünk
+         }
+         error.innerText = ""; // A hibaüzenet span elem szövege üres
+         if(input.value === "") { // Ha az input értéke üres
+            error.innerText = "Kötelező megadni!"; // A hibaüzenet span elem szövege Kötelező mező!
+            isValid = false; // A mezők nem érvényesek
+         }
+         objectForValues[input.id] = input.value; // Az objektumba eltároljuk az input id-ját és értékét
+        }
+        if(isValid){ // Ha a mezők érvényesek
+            forradalomArray.push(objectForValues); // A forradalom tömbhöz hozzáadjuk az objektumot
+            addARowTOTheTable(tbody, objectForValues); // Hozzáadunk egy sort a táblázathoz
+        }
+    });
+}
+/**
+ * 
+ * @param {HTMLElement} tbody 
+ * @param {forradalom} forradalom 
+ */
+const addARowTOTheTable = (tbody, forradalom) => { // Készítünk egy függvényt, ami hozzáad egy sort a táblázathoz
+    const tr = document.createElement("tr"); // Létrehozunk egy tr elemet
+    tbody.appendChild(tr); // A tbodyhoz hozzáadjuk a tr elemet
+
+    const forradalomCell = document.createElement("td"); // Létrehozunk egy td elemet a forradalomnak
+    forradalomCell.innerText = forradalom.revolution; // A td elem szövege a forradalom neve
+    tr.appendChild(forradalomCell); // A tr-hez hozzáadjuk a forradalom cellát
+
+    const evszamCell = document.createElement("td"); // Létrehozunk egy td elemet az évszámnak
+    evszamCell.innerText = forradalom.year; // A td elem szövege az évszám
+    tr.appendChild(evszamCell); // A tr-hez hozzáadjuk az évszám cellát
+
+    const sikeresCell = document.createElement("td"); // Létrehozunk egy td elemet a sikeresnek
+    sikeresCell.innerText = forradalom.success; // A td elem szövege a sikeresség
+    tr.appendChild(sikeresCell); // A tr-hez hozzáadjuk a sikeres cellát
+}
+
+/**
+ * 
+ * @param {HTMLDivElement} div 
+ * @param {{forradalom: string, evszam: Number, sikeres: string}[]} forradalomArray 
+ */
+const download = (div, forradalomArray) => { // Készítünk egy függvényt, ami letölti a táblázatot
+    const button = document.createElement("button"); // Létrehozunk egy gombot
+    button.innerText = "Letöltés"; // A gomb szövege Letöltés
+    div.appendChild(button); // A divhez hozzáadjuk a gombot
+
+    button.addEventListener("click", () => { // Hozzáadunk egy eseményfigyelőt a gombhoz, ami akkor fut le, ha rákattintunk
+        const link = document.createElement("a"); // Létrehozunk egy link elemet
+        const data = ["forradalom;évszám;sikeres"]; // Létrehozunk egy tömböt, amiben a fejléc van
+
+        for(const forr of forradalomArray) { // Végigmegyünk a forradalom tömbön
+            data.push(`${forr.revolution};${forr.year};${forr.success}`); // A tömbhöz hozzáadjuk az új sorokat
+        }
+        const innerText = data.join("\n"); // A tömböt egy stringgé alakítjuk
+        const blob = new Blob([innerText]); // Létrehozunk egy Blob objektumot, amiben a szöveg van
+        link.href = URL.createObjectURL(blob); // A link href attribútuma a Blob objektum URL-je
+        link.download = "tovabbi_forradalom.csv"; // A link letöltési neve forradalom.csv
+        link.click(); // A linkre kattintunk, hogy letöltsük a fájlt
+        URL.revokeObjectURL(link.href); // A Blob objektum URL-jét visszavonjuk
+    });
+}
+
+/**
+ * 
+ * @param {HTMLDivElement} div 
+ * @param {HTMLElement} tbody 
+ * @param {tomb[]} forradalomArray 
+ */
+const filterFormcreation = (div, tbody, forradalomArray) => { // Készítünk egy függvényt, ami létrehozza a szűrő formot
+    const divForFilter = divMaker("filterDiv"); // Létrehozunk egy divet a szűrő formnak
+    div.appendChild(divForFilter); // A divhez hozzáadjuk a szűrő form divet
+
+    const filterForm = document.createElement("form"); // Létrehozunk egy form elemet
+    divForFilter.appendChild(filterForm); // A szűrő formhoz hozzáadjuk a form elemet
+
+    const select = document.createElement("select"); // Létrehozunk egy select elemet
+    filterForm.appendChild(select); // A szűrő formhoz hozzáadjuk a select elemet
+
+    const options = [
+        {value: "", // Az üres érték a default érték
+            innerText: "" // Az üres érték szövege is üres
+        },
+        {value: "revolution", //Az első érték a forradalom
+            innerText: "Forradalom" // Az első érték szövege Forradalom
+        }, 
+        {value: "year", //A második érték az évszám
+            innerText: "Évszám" // A második érték szövege Évszám
+        }, 
+        {value: "success", // A harmadik érték a sikeres
+            innerText: "Sikeres" // A harmadik érték szövege Sikeres
+        } 
+    ]
+
+    for(const option of options) { // Végigmegyünk a legördülő menü elemein
+        const opt = document.createElement("option"); // Létrehozunk egy option elemet
+        opt.value = option.value; // Az option értéke az option value-ja
+        opt.innerText = option.innerText; // Az option szövege az option label-je
+        select.appendChild(opt); // A selecthez hozzáadjuk az option elemet
+    }
+
+    const input = document.createElement("input"); // Létrehozunk egy input elemet
+    input.id = "filterInput"; // Az input id-ja filterInput
+    filterForm.appendChild(input); // A szűrő formhoz hozzáadjuk az input elemet
+
+    const button = document.createElement("button"); // Létrehozunk egy gombot
+    button.innerText = "Szűrés"; // A gomb szövege Szűrés
+    filterForm.appendChild(button); // A szűrő formhoz hozzáadjuk a gombot
+
+    filterForm.addEventListener("submit", (e) => { // Hozzáadunk egy eseményfigyelőt a szűrő formhoz, ami akkor fut le, ha elküldjük a formot   
+        e.preventDefault(); // Megakadályozzuk az alapértelmezett viselkedést (az oldal újratöltését)
+        
+        const filteredInput = e.target.querySelector("#filterInput"); // Kiválasztjuk a szűrő input elemet
+        const select = e.target.querySelector("select"); // Kiválasztjuk a szűrő select elemet
+
+        const arrayThatIsFiltered = filter(forradalomArray, (forradalom) => { // Meghívjuk a filter függvényt, aminek átadjuk a forradalom tömböt és egy callback függvényt
+           if(select.value === "") { // Ha a select értéke üres
+                return true; // Visszatérünk igaz értékkel
+            }
+            return forradalom[select.value] === filteredInput.value;l
         });
+
+        tbody.innerHTML = ""; // A tbody tartalmát töröljük
+        for(const forradalom of arrayThatIsFiltered) { // Végigmegyünk a szűrt tömbön
+            addARowTOTheTable(tbody, forradalom); // Hozzáadunk egy sort a táblázathoz
+        }
+    });
+
+}
+
+const containerDiv = divMaker("containerDiv"); // Létrehozunk egy divet a táblázatnak
+document.body.appendChild(containerDiv); // A bodyhoz hozzáadjuk a táblázat divet
+tableCreation(containerDiv, (tbody) => { // Meghívjuk a tableCreation függvényt, aminek átadjuk a divet és egy callback függvényt
+    formCreation(tbody, containerDiv, tomb); // Meghívjuk a formCreation függvényt, aminek átadjuk a tbody-t, a divet és a forradalom tömböt
+    upload(tbody, containerDiv, tomb); // Meghívjuk az upload függvényt, aminek átadjuk a tbody-t, a divet és a forradalom tömböt
+    download(containerDiv, tomb); // Meghívjuk a download függvényt, aminek átadjuk a divet és a forradalom tömböt
+    filterFormcreation(containerDiv, tbody, tomb); // Meghívjuk a filterFormcreation függvényt, aminek átadjuk a divet, a tbody-t és a forradalom tömböt
+});

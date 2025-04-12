@@ -108,14 +108,14 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
 class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 
     /**
-     * @type {Array<FieldOfFormClass>}
+     * @type {FieldOfFormClass[]}
      */
     #arrayOfFormField;//Privát változó
 
     /**
      * 
      * @param {string} NameOfTheClass 
-     * @param {Array<{fieldid: string, fieldLabel: string}>} formFields
+     * @param {{fieldid: string, fieldLabel: string}[]} formFields
      * @param {Manager} manager
      */
     constructor(NameOfTheClass,formFields, manager){//Konstruktor hátom bemeneti paraméterrel
