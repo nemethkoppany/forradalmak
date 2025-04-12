@@ -10,6 +10,12 @@ const divMaker = (NameOfTheClass) => {//Arrow function egy bemeneti paraméterre
     return div;//Visszatérünk a divvel
 }
 
+/**
+ * 
+ * @param {Array<ForradalomData>} forradalomArray - A szűrendő objektumokat tartalmazó tömb. 
+ * @param {(forradalom: ForradalomData): boolean} callback - A szűrési feltételeket meghatározó függvény. 
+ * @returns {Array<ForradalomData>} - A szűrési feltételeknek megfelelő elemeket tartalmazó tömb. 
+ */
 const filter = (forradalomArray, callback) => {//Készítünk egy filter függvényt, ami egy tömböt és egy callback függvényt vár bemeneti paraméterként
     const filteredArray = [];//Készítünk egy üres tömböt, amibe a szűrt elemek kerülnek
     for(const forradalom of forradalomArray){//Végigmegyünk a bemeneti tömbön
@@ -109,10 +115,7 @@ const button = document.createElement("button");//Készítünk egy gombot
 button.textContent = "Hozzáadás";//Amibe ez lesz írva
 Simaform.appendChild(button);//És azt hozzárakjuk a fprm-hoz
 
-/**
- * @param {object} e
- * @param {HTMLFormElement} form
- */
+
 Simaform.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a form submit eseményére
     e.preventDefault();//Megakadályozzuk az alapétertelmezett lefutást
 

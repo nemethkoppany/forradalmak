@@ -107,12 +107,15 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
 
 class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 
+    /**
+     * @type {Array<FieldOfFormClass>}
+     */
     #arrayOfFormField;//Privát változó
 
     /**
      * 
      * @param {string} NameOfTheClass 
-     * @param {Array} formFields
+     * @param {Array<{fieldid: string, fieldLabel: string}>} formFields
      * @param {Manager} manager
      */
     constructor(NameOfTheClass,formFields, manager){//Konstruktor hátom bemeneti paraméterrel
@@ -155,6 +158,11 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
 }
 
 class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja az Upload osztály
+   /**
+    * 
+    * @param {string} NameOfTheClass 
+    * @param {Manager} manager 
+    */
     constructor(NameOfTheClass, manager){//Konstruktor két bemeneti paraméterrel
         super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
 

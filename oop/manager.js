@@ -1,13 +1,16 @@
 class Manager{
     /**
-     * @type {Array}
+     * @type {Array<{forradalom: string, evszam: number, sikeres: string}>}
      */
     #tomb; //privát változó létrehozása
 
+   /**
+    * @type {addForradalom_dataCallback}
+    */
     #addForradalom_dataCallback; //privát változó létrehozása
 
     /**
-     * @returns {Array}
+     * @property {Array<{forradalom: string, evszam: number, sikeres: string}>} tomb
      */
     constructor(){//Konstruktor létrehozása
         this.#tomb = [];//A privát változó értéke egy üres tömb
@@ -16,7 +19,7 @@ class Manager{
 
     /**
      * 
-     * @param {function} callback 
+     * @param {setaddForradalom_dataCallback} callback 
      */
     setaddForradalom_dataCallback(callback){//Egy setter létrehozása a privát változóhoz
         this.#addForradalom_dataCallback = callback;//A privát változó értéke a bemeneti paraméter
@@ -25,7 +28,7 @@ class Manager{
 
     /**
      * 
-     * @param {object} data 
+     * @param {ForradalomData} data - A hozzáadandó forradalom adatai. 
      */
     addData(data){//Egy metódus létrehozása
         this.#tomb.push(data);//A privát tombhöz hozzáadunk egy új elemet

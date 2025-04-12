@@ -1,16 +1,36 @@
 class ForradalomData{
+    /**
+     * @type {string}
+     */
     #forradalom; //Ez egy privát változó
+
+    /**
+     * @type {Number}
+     */
     #evszam; //Ez egy privát változó
+    /**
+     * @type {string}
+     */
     #sikeres; //Ez egy privát változó
 
+
+    /**
+     *  @returns {string}
+     */
     get forradalom(){//Ez egy getter, amivel elérjük a forradalom változót
         return this.#forradalom;//Visszatér a forradalom értékével
     }
 
+    /**
+     * @returns {Number}
+     */
     get evszam(){//Ez egy getter, amivel elérjük az évszám változót
         return this.#evszam;//Visszatér az évszám értékével
     }
 
+    /**
+     * @returns {string}
+     */
     get sikeres(){//Ez egy getter, amivel elérjük a sikeres változót
         return this.#sikeres;//Visszatér a sikeres értékével
     }
