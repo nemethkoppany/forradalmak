@@ -291,7 +291,7 @@ const filterFormcreation = (div, tbody, forradalomArray) => { // Készítünk eg
             addARowTOTheTable(tbody, forradalom); // Hozzáadunk egy sort a táblázathoz
         }
     });
-
+ 
 }
 
 const containerDiv = divMaker("containerDiv"); // Létrehozunk egy divet a táblázatnak
