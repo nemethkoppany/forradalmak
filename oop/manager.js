@@ -10,6 +10,11 @@ class Manager{
     #addForradalom_dataCallback; //privát változó létrehozása
 
     /**
+     * @type {{forradalom: string, evszam: number, sikeres: string}[]}
+     */
+    #tableRenderer; //privát változó létrehozása
+
+    /**
      * @property {Array<{forradalom: string, evszam: number, sikeres: string}>} tomb
      */
     constructor(){//Konstruktor létrehozása
@@ -24,6 +29,30 @@ class Manager{
     setaddForradalom_dataCallback(callback){//Egy setter létrehozása a privát változóhoz
         this.#addForradalom_dataCallback = callback;//A privát változó értéke a bemeneti paraméter
 
+    }
+
+    /**
+     * 
+     * @param {setTableRenderer} callback 
+     */
+    setTableRenderer(callback){//Egy setter létrehozása a privát változóhoz
+        this.#tableRenderer = callback;//A privát változó értéke a bemeneti paraméter
+    }
+
+    /**
+     * 
+     * @param {function} callback
+     */   
+
+     
+    filterOOP(callback){ //metódus létrehozása
+        const array = [];
+        for( const data of this.#tomb){//Végigmegyünk a privát tömbön
+            if(callback(data)){//Ha a callback függvény igazat ad vissza
+                array.push(data);//A tömbhöz hozzáadjuk az új elemet
+            }
+        }
+        this.#tableRenderer(array);//A privát változó értékét meghívjuk
     }
 
     /**

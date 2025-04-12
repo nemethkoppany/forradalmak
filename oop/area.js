@@ -60,23 +60,47 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         super(NameOfTheCssClass, manager);//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
         const tbody = this.#createTable();//Egy változóba eltároljuk a createTable() metódus visszatérési értékét
 
-        this.manager.setaddForradalom_dataCallback((data) => {//A manager osztályban beállítjuk a forradalom_dataCallback metódust
-            const row = document.createElement("tr");//Készítünk egy tr-t
-            tbody.appendChild(row);//Hozzáadjuk a tbody-hoz
-
-            const forradalomCell = document.createElement("td");//Készítünk egy td-t
-            forradalomCell.innerText = data.forradalom;//Az aktuális elem belekerül a cellába
-            row.appendChild(forradalomCell);//Hozzáadjuk a row-hoz
-
-            const evszamCell = document.createElement("td");//Készítünk egy td-t
-            evszamCell.innerText = data.evszam;//Az aktuális elem belekerül a cellába
-            row.appendChild(evszamCell);//Hozzáadjuk a row-hoz
-
-            const sikeresCell = document.createElement("td");//Készítünk egy td-t
-            sikeresCell.innerText = data.sikeres;//Az aktuális elem belekerül a cellába
-            row.appendChild(sikeresCell);//Hozzáadjuk a row-hoz
+      
+        /** 
+         * @param {{forradalom: string, evszam: number, sikeres: string}} data - Az új forradalom adatai, amelyeket hozzá kell adni a táblázathoz.
+         */
+        this.manager.setaddForradalom_dataCallback((data) => { //A managerhez hozzáadunk egy új függvényt, ami a setaddForradalom_dataCallback metódust hívja meg
+            this.#addRowToTable(tbody, data); //A tbody-t és a forradalom-t átadjuk a #addRowToTable metódusnak
         });
-       
+        
+        /**
+         * 
+         * 
+         * @param {{forradalom: string, evszam: number, sikeres: string}[]} data
+         */
+        this.manager.setTableRenderer((data) => { 
+            tbody.innerHTML = ""; // A tbody tartalmát üresre állítjuk
+            for (const forradalom of data) { // Végigmegyünk a tömbön
+                this.#addRowToTable(tbody, forradalom); // A tbody-t és a forradalom-t átadjuk a #addRowToTable metódusnak
+            }
+        });
+    }
+    /**
+     * 
+     * @param {HTMLElement} tbody 
+     * @param {{forradalom: string, evszam: number, sikeres: string}} data - 
+     */
+      #addRowToTable(tbody, data){//Ez a metódus hozzáad egy új sort a táblázathoz
+        const row = document.createElement("tr") //Készítünk egy HTML elemet
+        tbody.appendChild(row);//Azt hosszárakjuk a tbody-hoz
+
+        const forradalomCell = document.createElement("td");//Készítünk egy HTML elemet
+        forradalomCell.innerText = data.forradalom;//Az aktuális elem belekerül a cellába
+        row.appendChild(forradalomCell);//Hozzáadjuk a row-hoz
+
+        const evszamCell = document.createElement("td");//Készítünk egy HTML elemet
+        evszamCell.innerText = data.evszam;//Az aktuális elem belekerül a cellába
+        row.appendChild(evszamCell);//Hozzáadjuk a row-hoz
+
+        const sikeresCell = document.createElement("td");//Készítünk egy HTML elemet
+        sikeresCell.innerText = data.sikeres;//Az aktuális elem belekerül a cellába
+        row.appendChild(sikeresCell);//Hozzáadjuk a row-hoz
+
     }
     /**
      * 
