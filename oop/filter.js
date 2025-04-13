@@ -47,18 +47,26 @@ class Filter extends Area{
         button.innerText = "szűrés";//Beállítjuk a button szövegét
         form.appendChild(button);//Hozzáadjuk a button elemet a formhoz
 
-        form.addEventListener("submit", (e) => { //Hozzáadunk egy eseményfigyelőt a formhoz
-            e.preventDefault();//Megakadályozzuk az alapértelmezett eseményt
 
-            const filterInput = e.target.querySelector("#filterInput");//Kiválasztjuk az input elemet
-            const selectValue = e.target.querySelector("select").value;//Kiválasztjuk a select értékét
-
-            this.manager.filterOOP((forradalom) => { //Hívjuk a filterOOP metódust
-                if(selectValue === ""){//Ha a select értéke üres
-                    return true;//Ha a select értéke üres, akkor true-t adunk vissza
+      
+        form.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a filterForm submit eseményére
+        e.preventDefault();//Megakadályozzuk az alapértelmezett viselkedést
+            const filteringInput = e.target.querySelector("#filterInput");//Kiválasztjuk a filterInputot
+                this.manager.filterOOP((forradalom) => {//Készítünk egy szűrt tömböt, ami a filter függvény visszatérési értéke lesz
+                if(select.value == "revolution"){//Ha a select értéke revolution
+                    return forradalom.forradalom.includes(filteringInput.value);//Ha a filterInput értéke benne van a forradalom értékében
                 }
-                return forradalom[selectValue] === filterInput.value;//Ellenőrizzük, hogy a forradalom értéke megegyezik-e az input értékével
+                else if(select.value == "year"){//Ha a select értéke year
+                  return forradalom.evszam == filteringInput.value;//Ha a filterInput értéke benne van az évszám értékében
+                }
+                else if(select.value == "success"){//Ha a select értéke success
+                    return forradalom.sikeres.includes(filteringInput.value);//Ha a filterInput értéke benne van a sikeres értékében
+
+                }
+                else{
+                    return true;//Ha egyik sem, akkor is térjünk vissza igaz értékkels
+                }
             });
         });
     }
-}
+} 

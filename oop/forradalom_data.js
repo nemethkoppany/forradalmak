@@ -38,7 +38,7 @@ class ForradalomData{
     /**
      * 
      * @param {string} forradalom 
-     * @param {string} evszam 
+     * @param {Number} evszam 
      * @param {string} sikeres
      */
     constructor(forradalom, evszam, sikeres){//Ez a konstruktor létrehozza az objektumot
