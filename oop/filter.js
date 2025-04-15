@@ -47,7 +47,9 @@ class Filter extends Area{
         form.appendChild(button);//Hozzáadjuk a button elemet a formhoz
 
 
-      
+      /**
+       * 
+       */
         form.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a filterForm submit eseményére
         e.preventDefault();//Megakadályozzuk az alapértelmezett viselkedést
             const filteringInput = e.target.querySelector("#filterInput");//Kiválasztjuk a filterInputot

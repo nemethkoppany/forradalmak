@@ -50,6 +50,11 @@ class Area{//Készítünk egy Area osztályt
         return containerDiv;//Visszatérünk a containerDiv-el
     }
 
+    /**
+     * 
+     * @param {HTMLLabelElement} label 
+     * @returns {HTMLButtonElement}
+     */
     buttonCreator(label){ //Készítünk egy függvényt, ami létrehoz egy gombot
         const button = document.createElement("button");//Készítünk egy gombot
         button.textContent = label;//A gomb szövege a bemeneti paraméter lesz
@@ -66,25 +71,31 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         super(NameOfTheCssClass, manager);//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
         const tbody = this.#createTable();//Egy változóba eltároljuk a createTable() metódus visszatérési értékét
 
-        this.manager.setaddForradalom_dataCallback(this.#addForradalomCallback(tbody));//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
-        this.manager.setaddForradalom_dataCallback(this.#tableCallbackRenderer(tbody));//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
+        this.manager.setaddForradalom_dataCallback(this.#addForradalomCallback1(tbody));//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
+        this.manager.setTableRenderer(this.#tableCallbackRenderer(tbody));//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
         
     }
 
-   
-    #tableCallbackRenderer(bodyofTabel){ //Ez a metódus létrehozza a táblázatot
+   /**
+    * 
+    * @param {HTMLElement} bodyofTable 
+    */
+    #tableCallbackRenderer(bodyofTable){ //Ez a metódus létrehozza a táblázatot
         
             return (tomb) => { //térjünk vissza egy függvénnyel, ami a bodyOfTable-t várja bemeneti paraméternek
-            tbody.innerHTML = "";//A bodyOfTable belseje üres lesz
-            console.log(tomb);//Kiírjuk a tomb értékét
-            for(const data of tomb){//Végigmegyünk a tömbön
-                this.#addRowToTable(tbody, data);//Hozzáadjuk a táblázathoz az aktuális elemet
-            };//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
+            bodyofTable.innerHTML = "";//A bodyOfTable belseje üres lesz
+            for(const forradalom of tomb){//Végigmegyünk a tomb tömbön
+            this.#addRowToTable(bodyofTable, forradalom);//Hozzáadjuk a táblázathoz az aktuális elemet
+            }
         };
         
     }
 
-    #addForradalomCallback(bodyofTable){ //Ez a metódus létrehozása
+    /**
+     * 
+     * @param {HTMLElement} bodyofTable 
+     */
+    #addForradalomCallback1(bodyofTable){ //Ez a metódus létrehozása
         return (data) => {//térjünk vissza egy függvénnyel, ami a bodyOfTable-t várja bemeneti paraméternek
             this.#addRowToTable(bodyofTable, data);//Hozzáadjuk a táblázathoz az aktuális elemet
         }
@@ -97,16 +108,23 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
      */
       #addRowToTable(tbody, data){//Ez a metódus hozzáad egy új sort a táblázathoz
         const tr = document.createElement("tr");//Készítünk egy HTML elemet
-        this.#createCellForTable(tr, data.revolution);//Az aktuális elem belekerül a cellába
-        this.#createCellForTable(tr, data.year);//Az aktuális elem belekerül a cellába
-        this.#createCellForTable(tr, data.success);//Az aktuális elem belekerül a cellába
+        this.#createCellForTable(tr, data.forradalom);//Az aktuális elem belekerül a cellába
+        this.#createCellForTable(tr, data.evszam);//Az aktuális elem belekerül a cellába
+        this.#createCellForTable(tr, data.sikeres);//Az aktuális elem belekerül a cellába
         tbody.appendChild(tr);//Hozzáadjuk a tbody-hoz
     }
 
+    /**
+     * 
+     * @param {HTMLTableRowElement} row 
+     * @param {string} innerText 
+     * @param {string} type 
+     */
     #createCellForTable(row, innerText, type = "td"){//Ez a metódus létrehoz egy új cellát a táblázathoz
         const cell = document.createElement(type);//Készítünk egy HTML elemet
         cell.innerText = innerText;//Az aktuális elem belekerül a cellába
         row.appendChild(cell);//Hozzáadjuk a row-hoz
+        console.log(typeof type)
     }
 
     /**
@@ -158,6 +176,11 @@ class Form extends Area { // Az Area osztály leszármazottja a Form osztály
         formOOP.addEventListener("submit", this.#eventListenerForTheForm()); // Hozzáadunk egy eseményfigyelőt a form submit eseményére
     }
 
+    /**
+     * 
+     * @param {{fieldid:string, fieldElement:string}[]} List 
+     * @returns {HTMLFormElement}
+     */
     #createTheForm(List) { // Ez a metódus létrehozza a formot
         const formOOP = document.createElement("form"); // Készítünk egy formot
         this.div.appendChild(formOOP); // Hozzáadjuk a formot az Area által kreált div-hez
@@ -170,6 +193,10 @@ class Form extends Area { // Az Area osztály leszármazottja a Form osztály
         return formOOP; // Visszatérünk a formOOP változóval
     }
 
+    /**
+     * 
+     * @returns {function}
+     */
     #eventListenerForTheForm() {
         return (e) => { // Csinálunk egy eseménykezelőt a form submit eseményére
             e.preventDefault();
@@ -182,11 +209,15 @@ class Form extends Area { // Az Area osztály leszármazottja a Form osztály
         };
     }
 
+    /**
+     * 
+     * @returns {boolean}
+     */
     #validateFields() {
         let isValid = true; // Készítünk egy valid változót, aminek az értéke true
         for (const fieldOfForm of this.#arrayOfFormField) { // Végigmegyünk a tömbön
             fieldOfForm.error_element_value = ""; // A hibaüzenet szövege üres lesz
-            if (fieldOfForm.input_element_value === "") { // Ha az input mező üres
+            if (fieldOfForm.value === "") { // Ha az input mező üres
                 isValid = false; // A valid változó hamis lesz
                 fieldOfForm.error_element_value = "Kötelező kitölteni!"; // És kiírjuk a hibaüzenetet
             }
@@ -194,6 +225,10 @@ class Form extends Area { // Az Area osztály leszármazottja a Form osztály
         return isValid; // Visszatérünk a valid változóval
     }
 
+    /**
+     * 
+     * @returns {object}
+     */
     #getValueObject() { // Ez a metódus létrehoz egy új objektumot a felhasználó által megadott értékekkel
         const objectifyingUserResponse = {}; // Készítünk egy üres objektumot
         for (const fieldOfForm of this.#arrayOfFormField) { // Végigmegyünk a tömbön
@@ -222,6 +257,10 @@ class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja 
         downloadButton.addEventListener("click", this.#downloadButtonEventListener());//Hozzáadunk egy eseményfigyelőt a gombhoz
     }
 
+    /**
+     * 
+     * @returns {function}
+     */
     #downloadButtonEventListener(){
 
        return () => {//Hozzáadunk egy eseményfigyelőt a gombhoz
@@ -235,23 +274,34 @@ class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja 
         };
     }
 
+    /**
+     * 
+     * @returns {function}
+     */
     #eventListenerImport(){
        return (e) => {//Hozzáadunk egy eseményfigyelőt az inputhoz
             const file_TheOnlyOnes = e.target.files[0];//A file_TheOnlyOnes változó értéke az input fájl-ja
             const reader = new FileReader();//Készítünk egy új FileReader-t
+           
             reader.onload = () =>{//Amikor betöltődött a fájl
-                const fileText = reader.result.split('\n');//A fileText változó értéke a fájl tartalma, amit sorokra bontunk
-                const removeHeader = fileText.slice(1);//Eltávolítjuk az első elemet
+                const fileText = reader.result;//A fileText változó értéke a fájl tartalma, amit sorokra bontunk
+                const filesplitter = fileText.split("\n");//A fájl tartalmát sorokra bontjuk
+                const removeHeader = filesplitter.slice(1);//Eltávolítjuk az első elemet
                 for(const line of removeHeader){//Végigmegyünk a tömbön
                    const lineTrimmer_9000 = line.trim();//Eltávolítjuk a felesleges szóközöket
                    const splittedFields = lineTrimmer_9000.split(";");//A pontosvesszők mentén elválasztjuk az adatokat
-    
-                   const forradalomData = new ForradalomData(splittedFields[0], Number(splittedFields[1]), splittedFields[2]);//Készítünk egy új ForradalomData objektumot a fájl aktuális sorával
+                    const forradalom = {
+                        forradalom: splittedFields[0],//Az első elem a forradalom
+                        evszam: Number(splittedFields[1]),//A második elem az évszám, amit számra konvertálunk
+                        sikeres: splittedFields[2]//A harmadik elem a sikeres
+                    };
+                   const forradalomData = new ForradalomData(forradalom.forradalom, forradalom.evszam, forradalom.sikeres);//Készítünk egy új ForradalomData objektumot a fájl aktuális sorával
                    this.manager.addData(forradalomData);//Hozzáadjuk a managerhez az új ForradalomData objektumot
                 }
                
             }
-            reader.readAsText(file_TheOnlyOnes);//A reader beolvassa a fájlt 
+            reader.readAsText(file_TheOnlyOnes);//A reader beolvassa a fájlt
+             
         }
     }
     
@@ -294,6 +344,9 @@ class FieldOfFormClass{
     }
 
 
+    /**
+     * @param {string} value
+     */
     set error_element_value(value){//Csinálunk neki egy settert, hogy el tudjuk érni a változó
         this.#error_element.textContent = value;//Beállítjuk a #error_element értékét
     }
