@@ -43,8 +43,7 @@ class Filter extends Area{
         input.id = "filterInput";//Beállítjuk az input id-ját
         form.appendChild(input);//Hozzáadjuk az input elemet a formhoz
 
-        const button = document.createElement("button");//Létrehozunk egy button elemet
-        button.innerText = "szűrés";//Beállítjuk a button szövegét
+       const button = this.buttonCreator("Szűrés");//Létrehozunk egy button elemet a buttonCreator függvénnyel
         form.appendChild(button);//Hozzáadjuk a button elemet a formhoz
 
 

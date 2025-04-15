@@ -49,6 +49,12 @@ class Area{//Készítünk egy Area osztályt
         }
         return containerDiv;//Visszatérünk a containerDiv-el
     }
+
+    buttonCreator(label){ //Készítünk egy függvényt, ami létrehoz egy gombot
+        const button = document.createElement("button");//Készítünk egy gombot
+        button.textContent = label;//A gomb szövege a bemeneti paraméter lesz
+        return button;//Visszatérünk a gombbal
+    }
 }
 class Table extends Area{//Az Area osztály leszármazottja a Table osztály
     /**
@@ -60,48 +66,49 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         super(NameOfTheCssClass, manager);//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
         const tbody = this.#createTable();//Egy változóba eltároljuk a createTable() metódus visszatérési értékét
 
-      
-        /** 
-         * @param {{forradalom: string, evszam: number, sikeres: string}} data - Az új forradalom adatai, amelyeket hozzá kell adni a táblázathoz.
-         */
-        this.manager.setaddForradalom_dataCallback((data) => { //A managerhez hozzáadunk egy új függvényt, ami a setaddForradalom_dataCallback metódust hívja meg
-            this.#addRowToTable(tbody, data); //A tbody-t és a forradalom-t átadjuk a #addRowToTable metódusnak
-        });
+        this.manager.setaddForradalom_dataCallback(this.#addForradalomCallback(tbody));//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
+        this.manager.setaddForradalom_dataCallback(this.#tableCallbackRenderer(tbody));//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
         
-        /**
-         * 
-         * 
-         * @param {{forradalom: string, evszam: number, sikeres: string}[]} data
-         */
-        this.manager.setTableRenderer((data) => { 
-            tbody.innerHTML = ""; // A tbody tartalmát üresre állítjuk
-            for (const forradalom of data) { // Végigmegyünk a tömbön
-                this.#addRowToTable(tbody, forradalom); // A tbody-t és a forradalom-t átadjuk a #addRowToTable metódusnak
-            }
-        });
     }
+
+   
+    #tableCallbackRenderer(bodyofTabel){ //Ez a metódus létrehozza a táblázatot
+        
+            return (tomb) => { //térjünk vissza egy függvénnyel, ami a bodyOfTable-t várja bemeneti paraméternek
+            tbody.innerHTML = "";//A bodyOfTable belseje üres lesz
+            console.log(tomb);//Kiírjuk a tomb értékét
+            for(const data of tomb){//Végigmegyünk a tömbön
+                this.#addRowToTable(tbody, data);//Hozzáadjuk a táblázathoz az aktuális elemet
+            };//A managerhez hozzáadjuk a tableCallbackRenderer() metódust, ami a tbody-t várja bemeneti paraméternek
+        };
+        
+    }
+
+    #addForradalomCallback(bodyofTable){ //Ez a metódus létrehozása
+        return (data) => {//térjünk vissza egy függvénnyel, ami a bodyOfTable-t várja bemeneti paraméternek
+            this.#addRowToTable(bodyofTable, data);//Hozzáadjuk a táblázathoz az aktuális elemet
+        }
+    }
+
     /**
      * 
      * @param {HTMLElement} tbody 
      * @param {{forradalom: string, evszam: number, sikeres: string}} data - 
      */
       #addRowToTable(tbody, data){//Ez a metódus hozzáad egy új sort a táblázathoz
-        const row = document.createElement("tr") //Készítünk egy HTML elemet
-        tbody.appendChild(row);//Azt hosszárakjuk a tbody-hoz
-
-        const forradalomCell = document.createElement("td");//Készítünk egy HTML elemet
-        forradalomCell.innerText = data.forradalom;//Az aktuális elem belekerül a cellába
-        row.appendChild(forradalomCell);//Hozzáadjuk a row-hoz
-
-        const evszamCell = document.createElement("td");//Készítünk egy HTML elemet
-        evszamCell.innerText = data.evszam;//Az aktuális elem belekerül a cellába
-        row.appendChild(evszamCell);//Hozzáadjuk a row-hoz
-
-        const sikeresCell = document.createElement("td");//Készítünk egy HTML elemet
-        sikeresCell.innerText = data.sikeres;//Az aktuális elem belekerül a cellába
-        row.appendChild(sikeresCell);//Hozzáadjuk a row-hoz
-
+        const tr = document.createElement("tr");//Készítünk egy HTML elemet
+        this.#createCellForTable(tr, data.revolution);//Az aktuális elem belekerül a cellába
+        this.#createCellForTable(tr, data.year);//Az aktuális elem belekerül a cellába
+        this.#createCellForTable(tr, data.success);//Az aktuális elem belekerül a cellába
+        tbody.appendChild(tr);//Hozzáadjuk a tbody-hoz
     }
+
+    #createCellForTable(row, innerText, type = "td"){//Ez a metódus létrehoz egy új cellát a táblázathoz
+        const cell = document.createElement(type);//Készítünk egy HTML elemet
+        cell.innerText = innerText;//Az aktuális elem belekerül a cellába
+        row.appendChild(cell);//Hozzáadjuk a row-hoz
+    }
+
     /**
      * 
      * @returns {HTMLTableSectionElement}
@@ -119,9 +126,7 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         const headerContent = ["forradalom", "évszám", "sikeres"];//Fejléc tartalma egy tömbben
 
         for(const headerCellText of headerContent){//Végigmegyünk ezen a tömbön
-            const headerCell = document.createElement("th");//Készítünk egy HTML elemet
-            headerCell.innerText = headerCellText;//Az aktuális elem belekerül a cellába
-            headerRow.appendChild(headerCell);//Hozzáadjuk a headerRow-hoz
+           this.#createCellForTable(headerRow, headerCellText, "th");//Hozzáadjuk a fejlécet a táblázathoz
         }
         const tbody = document.createElement("tbody");//Készítünk egy tbody-t
         table.appendChild(tbody);//Hozzáadjuk azt a table-höz
@@ -129,12 +134,11 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
     }
 }
 
-class Form extends Area{//Az Area osztály leszármazottja a Form osztály
-
+class Form extends Area { // Az Area osztály leszármazottja a Form osztály
     /**
      * @type {FieldOfFormClass[]}
      */
-    #arrayOfFormField;//Privát változó
+    #arrayOfFormField; // Privát változó
 
     /**
      * 
@@ -142,43 +146,61 @@ class Form extends Area{//Az Area osztály leszármazottja a Form osztály
      * @param {{fieldid: string, fieldLabel: string}[]} formFields
      * @param {Manager} manager
      */
-    constructor(NameOfTheClass,formFields, manager){//Konstruktor hátom bemeneti paraméterrel
-        super(NameOfTheClass, manager)//Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály kontruktorát
+    constructor(NameOfTheClass, formFields, manager) { // Konstruktor három bemeneti paraméterrel
+        super(NameOfTheClass, manager); // Ezekkel a bemeneti paraméterekkel meghívjuk az Area osztály konstruktorát
         this.#arrayOfFormField = [];
+        const formOOP = this.#createTheForm(formFields); // A formOOP változó értéke a #createTheForm metódus visszatérési értéke
 
-        const formOOP = document.createElement("form");//Készítünk egy formot
-        this.div.appendChild(formOOP);//Ezt hozzérakjuk a az Area-ban létrehozott div-hez
- 
-        
-        for(const fieldElement of formFields){//Végigmegyünk a tömbön
-          const fieldOfForm = new FieldOfFormClass(fieldElement.fieldid, fieldElement.fieldLabel);//Készítünk egy új FieldOfFormClass objektumot a tömb aktuális elemével
-          this.#arrayOfFormField.push(fieldOfForm);//Hozzáadjuk a fieldOfForm-ot az arrayOfFormField tömbhöz
-            formOOP.appendChild(fieldOfForm.getDiv());//Hozzáadjuk a formhoz a fieldOfForm-ot
-        }
-        const button = document.createElement("button");//Készítünk egy gombot
-        button.textContent = "Hozzáadás";//Amibe ez lesz írva
-        formOOP.appendChild(button);//És azt hozzárakjuk a fprm-hoz
+        const button = document.createElement("button"); // Készítünk egy gombot
+        button.textContent = "Hozzáadás"; // A gomb szövege
+        formOOP.appendChild(button); // Hozzáadjuk a gombot a formhoz
 
-        formOOP.addEventListener("submit", (e) => {//Hozzáadunk egy eseményfigyelőt a formhoz
-            e.preventDefault();
-            const objectifyingUserResponse = {};//Készítünk egy üres objektumot, amibe belekerülnek a felhasználó által megadott értékek
-
-            let isValid = true;//Készítünk egy valid változót, aminek az értéke true
-            for(const fieldOfForm of this.#arrayOfFormField){//Végigmegyünk a tömbön
-                fieldOfForm.error_element_value = "";//A hibaüzenet szövege üres lesz
-                if(fieldOfForm.input_element_value === ""){//Ha az input mező üres
-                    isValid = false;//A valid változó hamis lesz
-                    fieldOfForm.error_element_value = "Kötelező kitölteni!";//És kiírjuk a hibaüzenetet
-                }
-                objectifyingUserResponse[fieldOfForm.id] = fieldOfForm.input_element_value;//Az objektumba belekerül az input id-ja ami egyenlő lesz az fieldOFForm value-jával
-            }
-            if(isValid){//Ha az isValid változó igaz
-                const data = new ForradalomData(objectifyingUserResponse.revolution, objectifyingUserResponse.year, objectifyingUserResponse.success);//Készítünk egy új ForradalomData objektumot a felhasználó által megadott értékekkel
-                this.manager.addData(data);//Hozzáadjuk a managerhez az új ForradalomData objektumot
-            }
-         });
+        formOOP.addEventListener("submit", this.#eventListenerForTheForm()); // Hozzáadunk egy eseményfigyelőt a form submit eseményére
     }
 
+    #createTheForm(List) { // Ez a metódus létrehozza a formot
+        const formOOP = document.createElement("form"); // Készítünk egy formot
+        this.div.appendChild(formOOP); // Hozzáadjuk a formot az Area által kreált div-hez
+
+        for (const fieldElement of List) { // Végigmegyünk a tömbön
+            const fieldOfForm = new FieldOfFormClass(fieldElement.fieldid, fieldElement.fieldLabel); // Készítünk egy új FieldOfFormClass objektumot
+            this.#arrayOfFormField.push(fieldOfForm); // Hozzáadjuk a fieldOfForm-ot az arrayOfFormField tömbhöz
+            formOOP.appendChild(fieldOfForm.getDiv()); // Hozzáadjuk a formhoz a fieldOfForm-ot
+        }
+        return formOOP; // Visszatérünk a formOOP változóval
+    }
+
+    #eventListenerForTheForm() {
+        return (e) => { // Csinálunk egy eseménykezelőt a form submit eseményére
+            e.preventDefault();
+            console.log(this.#getValueObject());
+            if (this.#validateFields()) { // Ha az isValid változó igaz
+                const objectifyingUserResponse = this.#getValueObject(); // Készítünk egy új objektumot a felhasználó által megadott értékekkel
+                const data = new ForradalomData(objectifyingUserResponse.revolution, objectifyingUserResponse.year, objectifyingUserResponse.success); // Készítünk egy új ForradalomData objektumot
+                this.manager.addData(data); // Hozzáadjuk a managerhez az új ForradalomData objektumot
+            }
+        };
+    }
+
+    #validateFields() {
+        let isValid = true; // Készítünk egy valid változót, aminek az értéke true
+        for (const fieldOfForm of this.#arrayOfFormField) { // Végigmegyünk a tömbön
+            fieldOfForm.error_element_value = ""; // A hibaüzenet szövege üres lesz
+            if (fieldOfForm.input_element_value === "") { // Ha az input mező üres
+                isValid = false; // A valid változó hamis lesz
+                fieldOfForm.error_element_value = "Kötelező kitölteni!"; // És kiírjuk a hibaüzenetet
+            }
+        }
+        return isValid; // Visszatérünk a valid változóval
+    }
+
+    #getValueObject() { // Ez a metódus létrehoz egy új objektumot a felhasználó által megadott értékekkel
+        const objectifyingUserResponse = {}; // Készítünk egy üres objektumot
+        for (const fieldOfForm of this.#arrayOfFormField) { // Végigmegyünk a tömbön
+            objectifyingUserResponse[fieldOfForm.id] = fieldOfForm.value; // Az objektumba belekerül az input id-ja és értéke
+        }
+        return objectifyingUserResponse; // Visszatérünk az objektummal
+    }
 }
 
 class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja az Upload osztály
@@ -194,7 +216,27 @@ class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja 
         inputElement.id = "fileinput";//Az id-ja file lesz
         inputElement.type = "file";//A típusa file lesz
         this.div.appendChild(inputElement);//Hozzáadjuk a div-hez
-        inputElement.addEventListener("change", (e) => {//Hozzáadunk egy eseményfigyelőt az inputhoz
+        inputElement.addEventListener("change", this.#eventListenerImport());//Hozzáadunk egy eseményfigyelőt az inputhoz
+        const downloadButton = this.buttonCreator("Letöltés");//Készítünk egy gombot, aminek a szövege Letöltés lesz
+        this.div.appendChild(downloadButton);//Hozzáadjuk a div-hez
+        downloadButton.addEventListener("click", this.#downloadButtonEventListener());//Hozzáadunk egy eseményfigyelőt a gombhoz
+    }
+
+    #downloadButtonEventListener(){
+
+       return () => {//Hozzáadunk egy eseményfigyelőt a gombhoz
+            const link = document.createElement("a");//Készítünk egy linket
+            const fileContent = this.manager.downloader9000();//meghívjük a letöltős függvényt
+            const blob = new Blob([fileContent]);//Letölthető blob készítése
+            link.href = URL.createObjectURL(blob);//Ideiglenes URL, hogy letölthető legyen a fájl
+            link.download = "tovabbi_forradalom.csv";//A letöltendő fájl neve
+            link.click();//A linkre kattintás
+            URL.revokeObjectURL(link.href);//A link eltávolítása
+        };
+    }
+
+    #eventListenerImport(){
+       return (e) => {//Hozzáadunk egy eseményfigyelőt az inputhoz
             const file_TheOnlyOnes = e.target.files[0];//A file_TheOnlyOnes változó értéke az input fájl-ja
             const reader = new FileReader();//Készítünk egy új FileReader-t
             reader.onload = () =>{//Amikor betöltődött a fájl
@@ -203,29 +245,16 @@ class FileUploaderAndDownloader extends Area{//Az Area osztály leszármazottja 
                 for(const line of removeHeader){//Végigmegyünk a tömbön
                    const lineTrimmer_9000 = line.trim();//Eltávolítjuk a felesleges szóközöket
                    const splittedFields = lineTrimmer_9000.split(";");//A pontosvesszők mentén elválasztjuk az adatokat
-
+    
                    const forradalomData = new ForradalomData(splittedFields[0], Number(splittedFields[1]), splittedFields[2]);//Készítünk egy új ForradalomData objektumot a fájl aktuális sorával
                    this.manager.addData(forradalomData);//Hozzáadjuk a managerhez az új ForradalomData objektumot
                 }
                
             }
             reader.readAsText(file_TheOnlyOnes);//A reader beolvassa a fájlt 
-        });
-
-        const downloadButton = document.createElement("button");//Készítünk egy gombot
-        downloadButton.textContent = "Letöltés";//Amibe ez lesz írva
-        this.div.appendChild(downloadButton);//És azt hozzárakjuk a div-hez
-        downloadButton.addEventListener("click", () => {//Hozzáadunk egy eseményfigyelőt a gombhoz
-            const link = document.createElement("a");//Készítünk egy linket
-            const fileContent = this.manager.downloader9000();//meghívjük a letöltős függvényt
-            const blob = new Blob([fileContent]);//Letölthető blob készítése
-            link.href = URL.createObjectURL(blob);//Ideiglenes URL, hogy letölthető legyen a fájl
-            link.download = "tovabbi_forradalom.csv";//A letöltendő fájl neve
-            link.click();//A linkre kattintás
-            URL.revokeObjectURL(link.href);//A link eltávolítása
-        });
-
+        }
     }
+    
 }
 
 class FieldOfFormClass{
@@ -260,8 +289,8 @@ class FieldOfFormClass{
     /**
      * @returns {string}
     */
-    get input_element_value(){//Csinálunk neki egy gettert, hogy el tudjuk érni a változó
-        return this.#input_element.value;//Visszatér a #input_element értékével
+    get value(){
+        return this.#input_element.value;
     }
 
 
