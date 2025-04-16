@@ -284,7 +284,7 @@ const filterFormcreation = (div, tbody, forradalomArray) => { // Készítünk eg
         }
 
         let  resultDiv = filterForm.querySelector(".result"); // Kiválasztjuk a szűrő formhoz tartozó result divet
-        if(!resultDiv) { // Ha a result div létezik
+        if(!resultDiv) { // Ha a result div nem létezik
             resultDiv = divMaker("result"); // Létrehozunk egy div elemet a szűrési eredménynek
             filterForm.appendChild(resultDiv); // A szűrő formhoz hozzáadjuk a div elemet
         }
