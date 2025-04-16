@@ -75,4 +75,20 @@ class Manager{
     }
     return data.join("\n");//Visszatérünk a tömbbel, amit egy stringgé alakítunk
    }
+
+   /**
+    * 
+    * @param {"forradalom" | "evszam" | "sikeres" } forradalomProperty 
+    * @param {string} fieldValue 
+    * @returns {Number}
+    */
+   counter(forradalomProperty, fieldValue){ //Számláló függvény
+        let counter = 0;//Változó létrehozása
+        for(const forradalom of this.#tomb){//Végigmegyünk a privát tömbön
+            if(forradalom[forradalomProperty].toLowerCase().includes(fieldValue.toLowerCase())){//Ha a forradalomProperty értéke megegyezik a fieldValue értékével
+                counter++;//A változó értékét növeljük
+            }
+        }
+        return counter;//Visszatérünk a változó értékével
+   }
 }

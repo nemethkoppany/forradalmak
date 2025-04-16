@@ -19,15 +19,15 @@ class Filter extends Area{
                 innerText: "" //Az első option szövege
             },
             {
-                value: "revolution", //A második option értéke
+                value: "forradalom", //A második option értéke
                 innerText: "forradalom" //A második option szövege
             },
             {
-                value: "year", //A harmadik option értéke
+                value: "evszam", //A harmadik option értéke
                 innerText: "évszám" //A harmadik option szövege
             },
             {
-                value: "success", //A negyedik option értéke
+                value: "sikeres", //A negyedik option értéke
                 innerText: "sikeres" //A negyedik option szövege
             }
         ];
@@ -46,28 +46,19 @@ class Filter extends Area{
        const button = this.buttonCreator("Szűrés");//Létrehozunk egy button elemet a buttonCreator függvénnyel
         form.appendChild(button);//Hozzáadjuk a button elemet a formhoz
 
+        const div = document.createElement("div");//Létrehozunk egy div elemet
+        form.appendChild(div);//Hozzáadjuk a div elemet a formhoz
 
       /**
        * 
        */
         form.addEventListener("submit", (e) => {//Csinálunk egy eseménykezelőt a filterForm submit eseményére
         e.preventDefault();//Megakadályozzuk az alapértelmezett viselkedést
-            const filteringInput = e.target.querySelector("#filterInput");//Kiválasztjuk a filterInputot
-                this.manager.filterOOP((forradalom) => {//Készítünk egy szűrt tömböt, ami a filter függvény visszatérési értéke lesz
-                if(select.value == "revolution"){//Ha a select értéke revolution
-                    return forradalom.forradalom.includes(filteringInput.value);//Ha a filterInput értéke benne van a forradalom értékében
-                }
-                else if(select.value == "year"){//Ha a select értéke year
-                  return forradalom.evszam == filteringInput.value;//Ha a filterInput értéke benne van az évszám értékében
-                }
-                else if(select.value == "success"){//Ha a select értéke success
-                    return forradalom.sikeres.includes(filteringInput.value);//Ha a filterInput értéke benne van a sikeres értékében
-
-                }
-                else{
-                    return true;//Ha egyik sem, akkor is térjünk vissza igaz értékkels
-                }
-            });
+            
+            const counter = manager.counter(select.value, input.value);//A manager osztály counter metódusát hívjuk meg
+            div.innerHTML = `A számlálás eredménye: ${counter}`; //A div belsejébe kiírjuk a számlálás eredményét
         });
+
+        
     }
 } 

@@ -124,7 +124,7 @@ class Table extends Area{//Az Area osztály leszármazottja a Table osztály
         const cell = document.createElement(type);//Készítünk egy HTML elemet
         cell.innerText = innerText;//Az aktuális elem belekerül a cellába
         row.appendChild(cell);//Hozzáadjuk a row-hoz
-        console.log(typeof type)
+
     }
 
     /**
@@ -200,7 +200,6 @@ class Form extends Area { // Az Area osztály leszármazottja a Form osztály
     #eventListenerForTheForm() {
         return (e) => { // Csinálunk egy eseménykezelőt a form submit eseményére
             e.preventDefault();
-            console.log(this.#getValueObject());
             if (this.#validateFields()) { // Ha az isValid változó igaz
                 const objectifyingUserResponse = this.#getValueObject(); // Készítünk egy új objektumot a felhasználó által megadott értékekkel
                 const data = new ForradalomData(objectifyingUserResponse.revolution, objectifyingUserResponse.year, objectifyingUserResponse.success); // Készítünk egy új ForradalomData objektumot

@@ -226,6 +226,7 @@ const download = (div, forradalomArray) => { // Készítünk egy függvényt, am
     });
 }
 
+
 /**
  * 
  * @param {HTMLDivElement} div 
@@ -274,21 +275,20 @@ const filterFormcreation = (div, tbody, forradalomArray) => { // Készítünk eg
 
     filterForm.addEventListener("submit", (e) => { // Hozzáadunk egy eseményfigyelőt a szűrő formhoz, ami akkor fut le, ha elküldjük a formot   
         e.preventDefault(); // Megakadályozzuk az alapértelmezett viselkedést (az oldal újratöltését)
-        
-        const filteredInput = e.target.querySelector("#filterInput"); // Kiválasztjuk a szűrő input elemet
-        const select = e.target.querySelector("select"); // Kiválasztjuk a szűrő select elemet
 
-        const arrayThatIsFiltered = filter(forradalomArray, (forradalom) => { // Meghívjuk a filter függvényt, aminek átadjuk a forradalom tömböt és egy callback függvényt
-           if(select.value === "") { // Ha a select értéke üres
-                return true; // Visszatérünk igaz értékkel
+        let szamlalo = 0;// Létrehozunk egy számlálót, ami megszámolja a szűrési feltételeknek megfelelő elemeket
+        for(const forradalom of forradalomArray){// Végigmegyünk a forradalom tömbön
+            if(forradalom[select.value].toLowerCase().includes(input.value.toLowerCase())){ // Ha a forradalom tömb aktuális elemének a select értéke megegyezik az input értékével
+                szamlalo++;// Növeljük a számlálót
             }
-            return forradalom[select.value] === filteredInput.value;l
-        });
-
-        tbody.innerHTML = ""; // A tbody tartalmát töröljük
-        for(const forradalom of arrayThatIsFiltered) { // Végigmegyünk a szűrt tömbön
-            addARowTOTheTable(tbody, forradalom); // Hozzáadunk egy sort a táblázathoz
         }
+
+        let  resultDiv = filterForm.querySelector(".result"); // Kiválasztjuk a szűrő formhoz tartozó result divet
+        if(!resultDiv) { // Ha a result div létezik
+            resultDiv = divMaker("result"); // Létrehozunk egy div elemet a szűrési eredménynek
+            filterForm.appendChild(resultDiv); // A szűrő formhoz hozzáadjuk a div elemet
+        }
+
+        resultDiv.innerHTML = `A szűrés eredménye: ${szamlalo}`; // A result div szövege a szűrési eredmény
     });
- 
 }
